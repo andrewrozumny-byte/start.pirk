@@ -52,7 +52,7 @@ const rows = [
   {
     feature: "Confidence in your choice",
     alone: "Second-guessing until surgery day",
-    pirk: "Data-backed, expert-guided certainty",
+    pirk: "Data-backed, expert-guided confidence",
   },
 ];
 

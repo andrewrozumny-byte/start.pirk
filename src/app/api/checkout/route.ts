@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         clientName,
         tier: tier || "guided",
       },
-      success_url: `${baseUrl}/results/${matchId}?paid=true&tier=${tier || "guided"}`,
+      success_url: `${baseUrl}/book-call?paid=true&tier=${tier || "guided"}&matchId=${matchId}`,
       cancel_url: `${baseUrl}/results/${matchId}`,
     });
 

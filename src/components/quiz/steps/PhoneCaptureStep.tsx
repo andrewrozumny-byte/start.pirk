@@ -31,12 +31,10 @@ export default function PhoneCaptureStep({
           <Phone className="w-8 h-8 text-coral" />
         </div>
         <h2 className="text-2xl md:text-3xl font-bold text-burgundy mb-2 text-pirk-heading">
-          One last thing — can we call you?
+          Almost there — we need your number.
         </h2>
         <p className="text-warm-grey text-lg">
-          Your matches are almost ready. A quick 5-minute call with your Pirk
-          advisor means we can tailor your results and answer any questions
-          before you see your surgeons.
+          Your matches are ready. We&apos;ll call you within 24 hours to walk you through your options, answer your questions, and help you decide what level of support is right for you.
         </p>
       </motion.div>
 
@@ -87,17 +85,17 @@ export default function PhoneCaptureStep({
             hover:bg-coral/90 transition-all duration-200 shadow-lg hover:shadow-xl
             cursor-pointer"
         >
-          Yes, Call Me
+          See My Matches
         </button>
 
         <div className="text-center pt-1">
           <button
             type="button"
             onClick={onSkip}
-            className="text-warm-grey hover:text-burgundy text-sm underline underline-offset-4
+            className="text-warm-grey/60 hover:text-warm-grey text-xs underline underline-offset-4
               transition-colors cursor-pointer"
           >
-            Skip for now
+            Continue without a number (note: we won&apos;t be able to call you)
           </button>
         </div>
       </motion.form>

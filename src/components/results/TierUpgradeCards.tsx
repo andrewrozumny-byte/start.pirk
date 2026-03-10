@@ -1,8 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Sparkles, Crown, MessageCircle } from "lucide-react";
+import { Check, Phone, Sparkles, Shield } from "lucide-react";
 import { trackInitiateCheckout } from "@/lib/tracking";
 
 interface TierUpgradeCardsProps {
@@ -10,89 +9,37 @@ interface TierUpgradeCardsProps {
   clientEmail: string;
 }
 
-const guidedFeatures = [
-  "Full surgeon profiles unlocked",
-  "Side-by-side cost breakdowns",
-  "Wait times & current availability",
-  "Payment plan comparisons",
-  "Know exactly what to ask at your consult",
-  "A real person who picks up the phone",
+const discoveryFeatures = [
+  "30-minute call with a Pirk advisor",
+  "Walk through your procedure options",
+  "Realistic cost guidance for your situation",
+  "Know exactly what questions to ask surgeons",
+  "No obligation — leads into full matching if you choose",
 ];
 
-const conciergeFeatures = [
-  "Everything in Choose With Confidence, plus:",
-  "Your own dedicated Pirk coordinator",
-  "We book and manage your consultations",
-  "We negotiate with surgeons on your behalf",
-  "Post-surgery check-ins & ongoing support",
-  "Completely personalised to your journey",
+const matchingFeatures = [
+  "Your top 3 independently vetted surgeon matches",
+  "Full profiles — qualifications, costs, wait times",
+  "Side-by-side comparison across your matches",
+  "Consultation prep guide & what to ask",
+  "Advisor call included to walk you through it",
+  "6 months of support after your match",
 ];
-
-// $149 over 6 months = ~$0.82/day
-const GUIDED_DAILY = "$0.82";
-const GUIDED_TOTAL = "$149";
-// $699 over 6 months = ~$3.83/day
-const CONCIERGE_DAILY = "$3.83";
-const CONCIERGE_TOTAL = "$699";
-
-function LoadingSpinner() {
-  return (
-    <span className="flex items-center justify-center gap-2">
-      <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-        <circle
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="3"
-          className="opacity-25"
-        />
-        <path
-          d="M4 12a8 8 0 018-8"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          className="opacity-75"
-        />
-      </svg>
-      Redirecting...
-    </span>
-  );
-}
 
 export default function TierUpgradeCards({
   matchId,
   clientEmail,
 }: TierUpgradeCardsProps) {
-  const [loadingTier, setLoadingTier] = useState<string | null>(null);
+  function handleDiscovery() {
+    trackInitiateCheckout("discovery");
+    // Navigate to book-call for discovery (Stripe Payment Link or Calendly)
+    window.location.href = "#"; // Replace with Stripe Payment Link for $59 discovery call
+  }
 
-  async function handleCheckout(tier: "guided" | "concierge") {
-    setLoadingTier(tier);
-    trackInitiateCheckout(tier);
-
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          matchId,
-          clientEmail,
-          tier,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        console.error("No checkout URL returned");
-        setLoadingTier(null);
-      }
-    } catch (error) {
-      console.error("Checkout error:", error);
-      setLoadingTier(null);
-    }
+  function handleMatching() {
+    trackInitiateCheckout("guided");
+    const params = new URLSearchParams({ tier: "guided", matchId, email: clientEmail });
+    window.location.href = `/payment-options?${params.toString()}`;
   }
 
   return (
@@ -107,47 +54,44 @@ export default function TierUpgradeCards({
           Unlock Your Full Results
         </h2>
         <p className="mt-2 text-warm-grey">
-          6 months of expert support — for less than a coffee a day.
+          Two ways to get expert support — both include a call with your advisor.
         </p>
       </div>
 
-      <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
-        {/* Choose With Confidence — $149 */}
-        <div className="relative overflow-hidden rounded-2xl border-2 border-coral bg-white shadow-lg">
-          {/* Badge */}
-          <div className="absolute top-0 right-0 rounded-bl-xl bg-coral px-4 py-1.5">
-            <span className="text-xs font-bold tracking-wide text-white uppercase">
-              Most Popular
-            </span>
-          </div>
+      <div className="mx-auto grid max-w-3xl gap-6 md:grid-cols-2">
 
+        {/* Discovery Call — $59 */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 0.4 }}
+          className="relative overflow-hidden rounded-2xl border-2 border-gray-100 bg-white shadow-sm"
+        >
           <div className="p-6 md:p-8">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-coral" />
-              <h3 className="text-lg font-bold text-burgundy">
-                Choose With Confidence
-              </h3>
-            </div>
-
-            <div className="mt-4">
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold text-near-black">
-                  {GUIDED_DAILY}
-                </span>
-                <span className="text-warm-grey">/day</span>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-light">
+                <Phone className="h-4 w-4 text-coral" />
               </div>
-              <p className="mt-1 text-sm text-warm-grey">
-                {GUIDED_TOTAL} one-time for 6 months of support
-              </p>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-warm-grey">
+                  Not sure where to start?
+                </p>
+                <h3 className="text-lg font-bold text-burgundy leading-tight">
+                  Discovery Call
+                </h3>
+              </div>
             </div>
 
-            <p className="mt-3 text-sm text-warm-grey">
-              Unlock full surgeon profiles with all the details you need to
-              choose with confidence.
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-4xl font-extrabold text-near-black">$59</span>
+              <span className="text-warm-grey text-sm">one-time</span>
+            </div>
+            <p className="text-xs text-warm-grey mb-5">
+              30-minute call · Credited if you upgrade to Full Matching
             </p>
 
-            <ul className="mt-6 space-y-3">
-              {guidedFeatures.map((feature) => (
+            <ul className="space-y-2.5 mb-8">
+              {discoveryFeatures.map((feature) => (
                 <li key={feature} className="flex items-start gap-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-coral" />
                   <span className="text-sm text-near-black">{feature}</span>
@@ -156,149 +100,87 @@ export default function TierUpgradeCards({
             </ul>
 
             <button
-              onClick={() => handleCheckout("guided")}
-              disabled={loadingTier !== null}
-              className="mt-8 w-full rounded-full bg-coral px-6 py-3.5 text-center font-semibold text-white shadow-md transition-all hover:shadow-lg hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+              onClick={handleDiscovery}
+              className="w-full rounded-full border-2 border-coral bg-white px-6 py-3.5 text-center font-semibold text-coral transition-all hover:bg-coral hover:text-white"
             >
-              {loadingTier === "guided" ? (
-                <LoadingSpinner />
-              ) : (
-                "Unlock Full Profiles"
-              )}
+              Book a Discovery Call — $59
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Fully Guided — $699 */}
-        <div className="relative overflow-hidden rounded-2xl border-2 border-burgundy bg-white shadow-lg">
-          {/* Badge */}
-          <div className="absolute top-0 right-0 rounded-bl-xl bg-burgundy px-4 py-1.5">
+        {/* Full Matching — $149 */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.4 }}
+          className="relative overflow-hidden rounded-2xl border-2 border-coral bg-white shadow-lg"
+        >
+          <div className="absolute top-0 right-0 rounded-bl-xl bg-coral px-4 py-1.5">
             <span className="text-xs font-bold tracking-wide text-white uppercase">
-              Premium
+              Most Popular
             </span>
           </div>
 
           <div className="p-6 md:p-8">
-            <div className="flex items-center gap-2">
-              <Crown className="h-5 w-5 text-burgundy" />
-              <h3 className="text-lg font-bold text-burgundy">Fully Guided</h3>
-            </div>
-
-            <div className="mt-4">
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold text-near-black">
-                  {CONCIERGE_DAILY}
-                </span>
-                <span className="text-warm-grey">/day</span>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-coral-light">
+                <Sparkles className="h-4 w-4 text-coral" />
               </div>
-              <p className="mt-1 text-sm text-warm-grey">
-                {CONCIERGE_TOTAL} one-time for 6 months of support
-              </p>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-coral">
+                  Ready to find your surgeon?
+                </p>
+                <h3 className="text-lg font-bold text-burgundy leading-tight">
+                  Full Matching
+                </h3>
+              </div>
             </div>
 
-            <p className="mt-3 text-sm text-warm-grey">
-              A dedicated advisor who guides you through every step, from
-              shortlist to surgery day.
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="text-4xl font-extrabold text-near-black">$0.82</span>
+              <span className="text-warm-grey text-sm">/day</span>
+            </div>
+            <p className="text-xs text-warm-grey mb-1">
+              $149 total · 6 months of support · less than a coffee a day
+            </p>
+            <p className="text-xs text-coral font-medium mb-5">
+              or from $29/month · Full refund if we can&apos;t match you
             </p>
 
-            <ul className="mt-6 space-y-3">
-              {conciergeFeatures.map((feature) => (
+            <ul className="space-y-2.5 mb-8">
+              {matchingFeatures.map((feature) => (
                 <li key={feature} className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-burgundy" />
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-coral" />
                   <span className="text-sm text-near-black">{feature}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-8 space-y-3">
-              <a
-                href="/book-call"
-                className="block w-full rounded-full border-2 border-burgundy bg-burgundy px-6 py-3.5 text-center font-semibold text-white shadow-md transition-all hover:shadow-lg hover:brightness-110"
-              >
-                Book a Free Strategy Call
-              </a>
-
-              <button
-                onClick={() => handleCheckout("concierge")}
-                disabled={loadingTier !== null}
-                className="w-full rounded-full border-2 border-burgundy bg-white px-6 py-3 text-center text-sm font-semibold text-burgundy transition-all hover:bg-burgundy/5 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loadingTier === "concierge" ? (
-                  <LoadingSpinner />
-                ) : (
-                  `Or Pay Now — ${CONCIERGE_TOTAL}`
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Custom Package */}
-        <div className="relative overflow-hidden rounded-2xl border-2 border-dashed border-warm-grey/30 bg-white/80 shadow-sm">
-          <div className="flex h-full flex-col justify-between p-6 md:p-8">
-            <div>
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-warm-grey" />
-                <h3 className="text-lg font-bold text-burgundy">
-                  Custom Package
-                </h3>
-              </div>
-
-              <div className="mt-4">
-                <span className="text-4xl font-extrabold text-near-black">
-                  Bespoke
-                </span>
-              </div>
-
-              <p className="mt-3 text-sm text-warm-grey">
-                Need something specific? We&apos;ll build a package around your
-                exact situation — whether it&apos;s a revision, multiple
-                procedures, or complex requirements.
-              </p>
-
-              <ul className="mt-6 space-y-3">
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-warm-grey" />
-                  <span className="text-sm text-near-black">
-                    Tailored to your exact needs
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-warm-grey" />
-                  <span className="text-sm text-near-black">
-                    Multiple procedures or revisions
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-warm-grey" />
-                  <span className="text-sm text-near-black">
-                    Extended support beyond 6 months
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-warm-grey" />
-                  <span className="text-sm text-near-black">
-                    Pricing agreed before you commit
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            <a
-              href="/book-call"
-              className="mt-8 block w-full rounded-full border-2 border-warm-grey/30 bg-white px-6 py-3.5 text-center font-semibold text-burgundy shadow-sm transition-all hover:border-burgundy hover:shadow-md"
+            <button
+              onClick={handleMatching}
+              className="w-full rounded-full bg-coral px-6 py-3.5 text-center font-bold text-white shadow-md transition-all hover:shadow-lg hover:brightness-105"
             >
-              Let&apos;s Talk
-            </a>
+              Get Matched — $149
+            </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Cost anchor */}
-      <p className="mt-6 text-center text-sm text-warm-grey">
-        A single wrong consultation costs $200–$500. A revision costs $15,000+.
-        Expert guidance starts at {GUIDED_DAILY}/day.
-      </p>
+      {/* Trust footer */}
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+        <span className="inline-flex items-center gap-1.5 text-xs text-warm-grey">
+          <Shield className="h-3.5 w-3.5 text-coral" />
+          Full refund if we can&apos;t match you
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-xs text-warm-grey">
+          <Shield className="h-3.5 w-3.5 text-coral" />
+          No lock-in
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-xs text-warm-grey">
+          <Shield className="h-3.5 w-3.5 text-coral" />
+          Secure payment
+        </span>
+      </div>
     </motion.div>
   );
 }

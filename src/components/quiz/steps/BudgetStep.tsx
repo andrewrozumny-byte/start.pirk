@@ -47,10 +47,10 @@ function getBudgetOptions(procedure: string): BudgetOption[] {
     ];
   }
 
-  // Body procedures — higher cost (tummy tuck, mummy makeover)
+  // Body procedures — higher cost (abdominoplasty, combined body)
   if (
-    procedure === "tummy_tuck" ||
-    procedure === "mummy_makeover"
+    procedure === "abdominoplasty" ||
+    procedure === "combined_body"
   ) {
     return [
       {
@@ -152,7 +152,7 @@ export default function BudgetStep({ data, onAnswer, onNext }: StepProps) {
             </div>
             <p className="text-xl font-bold text-burgundy mb-2">Good news!</p>
             <p className="text-warm-grey">
-              We know the exact pricing for every surgeon in our network.
+              We know the pricing for most surgeons in our network — and for any we don&apos;t, we do the work to find out for you.
             </p>
           </motion.div>
         ) : (

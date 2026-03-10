@@ -1,6 +1,7 @@
 "use client";
 
 import Hero from "@/components/landing/Hero";
+import ProcedureBanner from "@/components/landing/ProcedureBanner";
 // import AsSeenIn from "@/components/landing/AsSeenIn"; // Re-enable when real press logos are available
 import ProofStrip from "@/components/landing/ProofStrip";
 import OverwhelmSection from "@/components/landing/OverwhelmSection";
@@ -29,6 +30,7 @@ export default function LandingPage() {
   return (
     <>
       <Hero />
+      <ProcedureBanner />
       {/* <AsSeenIn /> — Re-enable when real press logos are available */}
       <ProofStrip />
       <OverwhelmSection />

@@ -9,7 +9,7 @@ const steps = [
     time: "Immediately",
     title: "Your matches are prepared",
     description:
-      "Our algorithm scores surgeons on 15+ criteria and shortlists the best fits for your goals, budget, and location.",
+      "Our algorithm scores surgeons on 15+ criteria and shortlists the closest matches for your goals, budget, and location.",
   },
   {
     icon: Phone,

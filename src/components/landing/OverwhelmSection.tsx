@@ -119,11 +119,31 @@ export default function OverwhelmSection() {
           >
             Or 2 minutes with Pirk.
           </motion.p>
+
+          {/* Fun time equivalents */}
+          <motion.div
+            className="mx-auto mt-6 grid max-w-lg grid-cols-3 gap-3"
+            initial={{ opacity: 0, y: 10 }}
+            animate={contrastInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.7, duration: 0.5 }}
+          >
+            {[
+              { stat: "70", label: "gym sessions" },
+              { stat: "3", label: "Netflix seasons" },
+              { stat: "14", label: "skipped lunches" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-xl bg-cream px-3 py-3 text-center">
+                <p className="text-2xl font-extrabold text-burgundy">{item.stat}</p>
+                <p className="mt-0.5 text-xs text-warm-grey">{item.label}</p>
+              </div>
+            ))}
+          </motion.div>
+
           <motion.p
             className="mx-auto mt-4 max-w-md text-lg italic text-warm-grey"
             initial={{ opacity: 0 }}
             animate={contrastInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.8, duration: 0.5 }}
+            transition={{ delay: 0.9, duration: 0.5 }}
           >
             &ldquo;We exist because that shouldn&apos;t be the case.&rdquo;
           </motion.p>

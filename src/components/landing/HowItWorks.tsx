@@ -17,7 +17,7 @@ const steps = [
     step: "2",
     title: "Get Matched With Vetted Surgeons",
     description:
-      "Our algorithm scores every surgeon on 15+ criteria to find your perfect match.",
+      "Our algorithm scores every surgeon on 15+ criteria to identify the right surgeons for your goals.",
   },
   {
     icon: Heart,

@@ -34,8 +34,8 @@ const subProcedures: Record<string, ProcedureOption[]> = {
   ],
   body: [
     { label: "Liposuction", value: "liposuction" },
-    { label: "Tummy Tuck", value: "tummy_tuck" },
-    { label: "Mummy Makeover", value: "mummy_makeover" },
+    { label: "Abdominoplasty", value: "abdominoplasty" },
+    { label: "Combined Body Procedures", value: "combined_body" },
     { label: "Other", value: "body_other" },
   ],
 };

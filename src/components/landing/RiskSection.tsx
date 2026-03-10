@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { UserX, DollarSign, Clock } from "lucide-react";
 
@@ -86,21 +85,20 @@ export default function RiskSection() {
           have to gamble with your health.
         </motion.p>
 
-        {/* Body confidence image */}
+        {/* Bottom CTA */}
         <motion.div
-          className="mx-auto mt-12 max-w-xl"
+          className="mx-auto mt-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.4, duration: 0.5 }}
         >
-          <Image
-            src="/images/confidence-body.jpg"
-            alt="Body confidence"
-            width={640}
-            height={360}
-            className="w-full rounded-2xl object-cover"
-          />
+          <a
+            href="/quiz"
+            className="inline-block rounded-full bg-coral px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:brightness-105"
+          >
+            Find My Surgeon — It&apos;s Free to Start
+          </a>
         </motion.div>
       </div>
     </section>

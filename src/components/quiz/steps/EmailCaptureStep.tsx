@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import type { StepProps } from "../types";
-import { Mail, Sparkles, ShieldCheck } from "lucide-react";
+import { Mail, ShieldCheck } from "lucide-react";
 
 export default function EmailCaptureStep({
   data,
@@ -36,21 +37,29 @@ export default function EmailCaptureStep({
 
   return (
     <div className="w-full max-w-xl mx-auto">
+      {/* Lifestyle image */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="text-center mb-8"
+        className="relative w-full h-48 rounded-2xl overflow-hidden mb-6 shadow-sm"
       >
-        <div className="w-16 h-16 rounded-full bg-coral-light flex items-center justify-center mx-auto mb-4">
-          <Sparkles className="w-8 h-8 text-coral" />
+        <Image
+          src="/images/women-close.jpg"
+          alt="Feeling confident about your journey"
+          fill
+          className="object-cover object-top"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-burgundy/60 to-transparent" />
+        <div className="absolute bottom-4 left-4 right-4">
+          <p className="text-white font-semibold text-lg leading-tight">
+            Your matches are ready.
+          </p>
+          <p className="text-white/80 text-sm mt-0.5">
+            Where should we send your personalised report?
+          </p>
         </div>
-        <h2 className="text-2xl md:text-3xl font-bold text-burgundy mb-2 text-pirk-heading">
-          Your matches are ready!
-        </h2>
-        <p className="text-warm-grey text-lg">
-          Where should we send your personalised surgeon report?
-        </p>
       </motion.div>
 
       <motion.form

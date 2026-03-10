@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Shield, Star, MapPin, User, Lock } from "lucide-react";
+import { Shield, Star, Lock } from "lucide-react";
 import SurgeonMatchCard from "./SurgeonMatchCard";
 import TierUpgradeCards from "./TierUpgradeCards";
 import { trackPurchase } from "@/lib/tracking";
@@ -66,13 +66,20 @@ function getProcedureLabel(procedure: string): string {
     facelift: "Facelift",
     face_other: "Facial Surgery",
     liposuction: "Liposuction",
-    tummy_tuck: "Tummy Tuck",
-    mummy_makeover: "Mummy Makeover",
+    abdominoplasty: "Abdominoplasty",
+    combined_body: "Combined Body Procedures",
     body_other: "Body Contouring",
     not_sure: "Cosmetic Surgery",
   };
   return labels[procedure] || "Cosmetic Surgery";
 }
+
+// Blurred photo gradient styles — simulate blurred portrait photos
+const avatarGradients = [
+  "radial-gradient(circle at 50% 35%, #c9956b 0%, #a0705a 45%, #7a5048 100%)",
+  "radial-gradient(circle at 50% 35%, #b8a89a 0%, #967b6e 45%, #755e58 100%)",
+  "radial-gradient(circle at 50% 35%, #d4b896 0%, #b89070 45%, #8a6552 100%)",
+];
 
 // Placeholder data for blurred cards when matches haven't been generated yet
 const placeholderSurgeons = [
@@ -80,19 +87,16 @@ const placeholderSurgeons = [
     rank: 1,
     score: 0.94,
     label: "Top Match",
-    initials: "SM",
   },
   {
     rank: 2,
     score: 0.89,
     label: "Strong Match",
-    initials: "JT",
   },
   {
     rank: 3,
     score: 0.85,
     label: "Great Match",
-    initials: "ER",
   },
 ];
 
@@ -120,9 +124,15 @@ function PlaceholderCard({
       </div>
 
       <div className="p-6 text-center">
-        {/* Circle avatar */}
-        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-coral-light to-coral/20">
-          <User className="h-10 w-10 text-coral/50" />
+        {/* Blurred photo avatar */}
+        <div className="mx-auto mb-4 h-20 w-20 overflow-hidden rounded-full ring-2 ring-coral/20">
+          <div
+            className="h-full w-full scale-110"
+            style={{
+              background: avatarGradients[index % avatarGradients.length],
+              filter: "blur(5px)",
+            }}
+          />
         </div>
 
         {/* Name — redacted */}

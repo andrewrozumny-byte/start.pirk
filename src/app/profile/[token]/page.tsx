@@ -46,10 +46,10 @@ const PROCEDURE_OPTIONS = [
   { slug: "chin-augmentation", label: "Chin Augmentation", category: "Face" },
 
   // Body
-  { slug: "tummy-tuck", label: "Tummy Tuck (Abdominoplasty)", category: "Body" },
+  { slug: "abdominoplasty", label: "Abdominoplasty", category: "Body" },
   { slug: "liposuction", label: "Liposuction", category: "Body" },
   { slug: "bbl", label: "BBL (Brazilian Butt Lift)", category: "Body" },
-  { slug: "mummy-makeover", label: "Mummy Makeover", category: "Body" },
+  { slug: "combined-body", label: "Combined Body Procedures", category: "Body" },
   { slug: "body-lift", label: "Body Lift", category: "Body" },
   { slug: "arm-lift", label: "Arm Lift (Brachioplasty)", category: "Body" },
   { slug: "thigh-lift", label: "Thigh Lift", category: "Body" },

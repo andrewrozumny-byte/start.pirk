@@ -4,23 +4,55 @@ import type { NextRequest } from "next/server";
 // PIN for team preview access — change or remove when done
 const PREVIEW_PIN = "pirk2025";
 
+const DASHBOARD_COOKIE = "dashboard-auth";
+
+// /dashboard alone or /dashboard/xxx except /dashboard/login
+function isDashboardProtectedPath(path: string): boolean {
+  if (path === "/dashboard") return true;
+  if (!path.startsWith("/dashboard/")) return false;
+  return path !== "/dashboard/login";
+}
+
+function requiresDashboardAuth(path: string): boolean {
+  if (path === "/dashboard/login") return false;
+  if (isDashboardProtectedPath(path)) return true;
+  if (path.startsWith("/surgeons")) return true;
+  if (path.startsWith("/match")) return true;
+  if (path.startsWith("/clients")) return true;
+  if (path.startsWith("/surgeon-profiles")) return true;
+  return false;
+}
+
 export function middleware(request: NextRequest) {
-  // Only gate when accessed via tunnel (not localhost)
+  const path = request.nextUrl.pathname;
+
+  // Allow static assets and API routes used by auth
+  if (
+    path === "/api/preview-auth" ||
+    path === "/api/dashboard-auth" ||
+    path.startsWith("/_next") ||
+    path.startsWith("/favicon")
+  ) {
+    return NextResponse.next();
+  }
+
+  // Dashboard password protection (when DASHBOARD_PASSWORD is set)
+  const dashboardPassword = process.env.DASHBOARD_PASSWORD;
+  if (dashboardPassword && requiresDashboardAuth(path)) {
+    const dashboardCookie = request.cookies.get(DASHBOARD_COOKIE);
+    if (!dashboardCookie?.value) {
+      const loginUrl = new URL("/dashboard/login", request.url);
+      loginUrl.searchParams.set("returnUrl", path);
+      return NextResponse.redirect(loginUrl);
+    }
+  }
+
+  // Only gate rest of site when accessed via tunnel (not localhost)
   const host = request.headers.get("host") || "";
   const isLocalhost =
     host.startsWith("localhost") || host.startsWith("127.0.0.1");
 
   if (isLocalhost) {
-    return NextResponse.next();
-  }
-
-  // Allow the PIN entry API and static assets
-  const path = request.nextUrl.pathname;
-  if (
-    path === "/api/preview-auth" ||
-    path.startsWith("/_next") ||
-    path.startsWith("/favicon")
-  ) {
     return NextResponse.next();
   }
 

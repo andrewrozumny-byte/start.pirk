@@ -1,8 +1,8 @@
 # Vercel deployment plan — Pirk
 
-Pushing the repo to Vercel **will not work smoothly** as-is. The app uses **SQLite** (local file `pirk.db`) and **better-sqlite3**. Vercel’s serverless environment has no persistent filesystem, so the database would fail in production. Most pages (dashboard, surgeons, match, quiz, results, etc.) depend on the DB.
+**Option B (PostgreSQL) is already prepared in this repo.** The app is configured for PostgreSQL; you only need to create a database, set `DATABASE_URL`, and deploy. See [Option B — What’s done and what you do next](#option-b--full-app-with-database--recommended) below.
 
-Below is a step-by-step plan for two scenarios: **marketing-only** (no DB) and **full app** (with a cloud database).
+Below is the full plan for both **marketing-only** (Option A) and **full app** (Option B).
 
 ---
 
@@ -52,61 +52,56 @@ Use this if you only need the public marketing/landing pages and static funnels.
 
 Use this so the whole app (including dashboard, surgeons, match, quiz, results) works on Vercel.
 
-### 1. Choose a production database
+### Option B — What’s done and what you do next
 
-SQLite is not suitable for Vercel. Pick one:
+**Already done in this repo:**
 
-- **Vercel Postgres** or **Neon** (PostgreSQL) — recommended; works with Prisma and Vercel.
-- **Turso** (libSQL) — SQLite-compatible; you can keep the Prisma SQLite schema and use Turso’s connection URL with an adapter.
+- Prisma is set to **PostgreSQL** (`prisma/schema.prisma`: `provider = "postgresql"`).
+- Connection URL is read from **`DATABASE_URL`** in `prisma.config.ts`.
+- **`src/lib/db.ts`** uses the default Prisma client (no SQLite adapter).
+- **Initial migration** is in `prisma/migrations/20250311120000_init_postgres/migration.sql`.
+- **Build scripts:** `postinstall` runs `prisma generate`; `vercel-build` runs `prisma generate && prisma migrate deploy && next build`.
+- **`.env.example`** lists `DATABASE_URL` and other optional env vars.
 
-If you choose **Postgres** (Vercel Postgres or Neon), you’ll switch the Prisma datasource and adjust the app for Postgres (see below). If you choose **Turso**, you keep SQLite in the schema and only change the connection (and possibly the driver/adapter in `src/lib/db.ts`).
+**You need to:**
+
+1. **Create a Postgres database**  
+   - **Vercel Postgres:** Vercel dashboard → your project → Storage → Create Database → Postgres. Copy `DATABASE_URL` (or the env vars Vercel gives you).  
+   - **Neon:** [neon.tech](https://neon.tech) → create a project → copy the connection string.
+
+2. **Set `DATABASE_URL`**  
+   - **Locally:** Copy `.env.example` to `.env` and set `DATABASE_URL` to your Postgres URL.  
+   - **Vercel:** Project → Settings → Environment Variables → add `DATABASE_URL` for Production and Preview.
+
+3. **Apply migrations**  
+   - **Locally (first time):** `npx prisma migrate deploy` (or `npx prisma migrate dev` if you prefer).  
+   - **On Vercel:** Use **Build Command** `npm run vercel-build` so `prisma migrate deploy` runs on each deploy and creates/updates tables.
+
+4. **Deploy**  
+   - Push to your connected branch. Ensure the Vercel project uses **Build Command**: `npm run vercel-build` (or leave default and it will use `vercel-build` if configured in `package.json`).  
+   - Add any other env vars from `.env.example` (Stripe, `NEXT_PUBLIC_BASE_URL`, etc.) as needed.
 
 ---
 
-### 2. Switch to PostgreSQL (if you chose Vercel Postgres or Neon)
+### 1. Choose a production database (reference)
 
-2.1. **Create the database**
-   - **Vercel Postgres:** Vercel dashboard → your project → Storage → Create Database → Postgres.
-   - **Neon:** [neon.tech](https://neon.tech) → create a project and copy the connection string.
+SQLite is not suitable for Vercel. This repo is already set up for **PostgreSQL**:
 
-2.2. **Point Prisma at Postgres**
-   - In `prisma/schema.prisma`, change:
-     ```prisma
-     datasource db {
-       provider = "postgresql"
-       url      = env("DATABASE_URL")
-     }
-     ```
-   - Remove the `url` from `prisma.config.ts` datasource if it’s only for SQLite; rely on `env("DATABASE_URL")` for production.
+- **Vercel Postgres** or **Neon** — use one of these; create a database and set `DATABASE_URL` as above.
 
-2.3. **Adjust schema for Postgres (if needed)**
-   - SQLite and Postgres are mostly compatible for simple types. Check for:
-     - `Int` vs `BigInt`
-     - JSON: SQLite often uses `String` for JSON; Postgres can use `Json` type.
-   - Run `npx prisma validate` and fix any errors.
+**Turso** (SQLite-compatible) is an alternative but would require changing the Prisma provider and adapter back to SQLite/Turso; the current setup is Postgres-only.
 
-2.4. **Create migrations**
-   - `npx prisma migrate dev --name init_postgres` (creates migration from current schema).
-   - Commit the new migration files under `prisma/migrations`.
+---
 
-2.5. **Change `src/lib/db.ts` for Postgres**
-   - Stop using the SQLite adapter and use the default Prisma client with `DATABASE_URL`:
-     ```ts
-     import { PrismaClient } from "@/generated/prisma/client";
+### 2. PostgreSQL setup (already done in repo)
 
-     const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
+2.1. **Create the database** — see “You need to” above.
 
-     function createPrismaClient() {
-       return new PrismaClient();
-     }
+2.2. **Prisma** — already set: `prisma/schema.prisma` has `provider = "postgresql"`; `prisma.config.ts` has `datasource.url` from `process.env["DATABASE_URL"]`.
 
-     export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-     if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
-     ```
-   - Remove `@prisma/adapter-better-sqlite3` and `better-sqlite3` from production code paths (you can keep them in dev if you still use SQLite locally with a separate config).
+2.3. **Migrations** — initial migration is in `prisma/migrations/20250311120000_init_postgres/`. Run `prisma migrate deploy` when `DATABASE_URL` is set.
 
-2.6. **Optional: keep SQLite for local dev**
-   - Use `DATABASE_URL` in production (Postgres) and a local `file:./pirk.db` or `DATABASE_URL` only when running locally, so the same codebase can use Postgres on Vercel and SQLite (or Postgres) locally.
+2.4. **`src/lib/db.ts`** — already uses `new PrismaClient()` (no SQLite adapter).
 
 ---
 

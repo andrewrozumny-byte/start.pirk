@@ -26,7 +26,13 @@ function DashboardLoginForm() {
         router.refresh();
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error || "Invalid password");
+        if (res.status === 503) {
+          setError(
+            "Dashboard login is not configured. Add DASHBOARD_PASSWORD to your environment variables (e.g. in Vercel → Settings → Environment Variables)."
+          );
+        } else {
+          setError(data.error || "Invalid password");
+        }
         setPassword("");
       }
     } catch {

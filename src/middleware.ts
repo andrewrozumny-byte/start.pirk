@@ -36,9 +36,8 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Dashboard password protection (when DASHBOARD_PASSWORD is set)
-  const dashboardPassword = process.env.DASHBOARD_PASSWORD;
-  if (dashboardPassword && requiresDashboardAuth(path)) {
+  // Dashboard password protection — always require cookie for admin routes
+  if (requiresDashboardAuth(path)) {
     const dashboardCookie = request.cookies.get(DASHBOARD_COOKIE);
     if (!dashboardCookie?.value) {
       const loginUrl = new URL("/dashboard/login", request.url);

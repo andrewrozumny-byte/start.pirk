@@ -1,0 +1,1631 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pirk — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #F9F5F2;
+  --coral: #F2705C;
+  --coral-lt: #fde8e4;
+  --coral-md: #f5a898;
+  --plum: #4D0121;
+  --plum-lt: #7a1a3d;
+  --grey: #66645E;
+  --near-black: #282726;
+  --white: #ffffff;
+  --border: #e8ddd8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;}
+body{font-family:'Outfit',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column;align-items:center;}
+
+/* ── TOPBAR ── */
+.topbar{width:100%;padding:14px 40px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.logo{font-size:20px;font-weight:700;color:var(--plum);letter-spacing:-0.5px;}
+.logo em{color:var(--coral);font-style:normal;}
+.prog-wrap{flex:1;max-width:320px;margin:0 32px;}
+.prog-bar{height:3px;background:var(--coral-lt);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--coral);border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.prog-text{font-size:11px;color:var(--grey);margin-bottom:5px;letter-spacing:.3px;}
+.step-ct{font-size:11px;color:var(--grey);white-space:nowrap;letter-spacing:.3px;}
+
+/* ── LAYOUT ── */
+.wrap{width:100%;max-width:620px;padding:52px 28px 100px;}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.on{display:block;animation:up .28s ease forwards;}
+@keyframes up{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TYPOGRAPHY ── */
+.eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;color:var(--coral);margin-bottom:10px;}
+.qtitle{font-size:25px;font-weight:700;color:var(--plum);line-height:1.25;margin-bottom:8px;letter-spacing:-.3px;}
+.qsub{font-size:13px;color:var(--grey);line-height:1.65;margin-bottom:30px;}
+.qsub strong{color:var(--plum);font-weight:600;}
+.qnote{font-size:11px;color:var(--grey);font-style:italic;margin-bottom:14px;letter-spacing:.2px;}
+
+/* ── SIMPLE OPTION CARDS (single-click-go) ── */
+.opt-list{display:flex;flex-direction:column;gap:9px;}
+.opt{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;cursor:pointer;transition:all .16s ease;display:flex;align-items:center;gap:16px;}
+.opt:hover{border-color:var(--coral);background:var(--coral-lt);}
+.opt.sel{border-color:var(--coral);background:var(--coral-lt);}
+.opt-icon{width:36px;height:36px;border-radius:8px;background:var(--coral-lt);border:1px solid var(--coral-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.opt-icon svg{display:block;}
+.opt-body{flex:1;}
+.opt-title{font-size:14px;font-weight:600;color:var(--plum);margin-bottom:2px;}
+.opt-sub{font-size:12px;color:var(--grey);line-height:1.45;}
+.opt-also{font-size:11px;color:var(--coral);font-weight:500;margin-bottom:4px;}
+.opt-badge{display:inline-block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;background:var(--plum);color:var(--white);padding:2px 8px;border-radius:20px;margin-bottom:5px;}
+.opt-badge.coral{background:var(--coral);}
+.opt-arrow{color:var(--border);font-size:16px;transition:all .16s;flex-shrink:0;}
+.opt:hover .opt-arrow,.opt.sel .opt-arrow{color:var(--coral);transform:translateX(3px);}
+
+/* ── 2-COL CARDS ── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tile{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:22px 18px;cursor:pointer;transition:all .16s ease;text-align:center;}
+.tile:hover{border-color:var(--coral);background:var(--coral-lt);}
+.tile.sel{border-color:var(--coral);background:var(--coral-lt);}
+.tile-icon{width:44px;height:44px;background:var(--coral-lt);border:1px solid var(--coral-md);border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+.tile-title{font-size:14px;font-weight:600;color:var(--plum);margin-bottom:3px;}
+.tile-sub{font-size:11px;color:var(--grey);line-height:1.4;}
+
+/* ── CIRCLES VISUAL ── */
+.circle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.crd{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:20px 16px;cursor:pointer;transition:all .16s ease;text-align:center;}
+.crd:hover{border-color:var(--coral);background:var(--coral-lt);}
+.crd.sel{border-color:var(--coral);background:var(--coral-lt);}
+.circles{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:50px;margin-bottom:12px;}
+.cb{border-radius:50%;background:#ddd8d4;}
+.ca{border-radius:50%;background:var(--coral-md);}
+.crd-title{font-size:13px;font-weight:600;color:var(--plum);margin-bottom:2px;}
+.crd-sub{font-size:11px;color:var(--grey);line-height:1.4;}
+
+/* ── CHIPS (multi) ── */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.chip{background:var(--white);border:1.5px solid var(--border);border-radius:30px;padding:9px 16px;cursor:pointer;font-size:12px;font-weight:500;color:var(--near-black);transition:all .15s ease;font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:7px;}
+.chip:hover{border-color:var(--coral);color:var(--plum);}
+.chip.sel{border-color:var(--coral);background:var(--coral-lt);color:var(--plum);font-weight:600;}
+.chip-dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:background .15s;flex-shrink:0;}
+.chip.sel .chip-dot{background:var(--coral);}
+
+/* ── INFO BLOCK ── */
+.info-block{background:var(--plum);border-radius:10px;padding:16px 20px;margin-bottom:22px;}
+.info-block p{font-size:13px;color:rgba(255,255,255,.85);line-height:1.6;}
+.info-block strong{color:var(--white);}
+.info-block.green{background:var(--white);border:1.5px solid #a7d9c0;}
+.info-block.green p{color:#1a5c38;}
+.info-block.green strong{color:#0d3d26;}
+
+/* ── REVIEW STRIP ── */
+.review-strip{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:24px;}
+.review-stars{display:flex;gap:2px;margin-bottom:6px;}
+.star{width:12px;height:12px;background:var(--coral);border-radius:2px;}
+.review-text{font-size:12px;color:var(--near-black);line-height:1.6;font-style:italic;margin-bottom:6px;}
+.review-name{font-size:10px;font-weight:600;color:var(--grey);text-transform:uppercase;letter-spacing:1px;}
+
+/* ── NARROWING MOMENT ── */
+.narrow-block{background:var(--plum);border-radius:12px;padding:22px 24px;margin-bottom:24px;display:flex;gap:24px;align-items:stretch;}
+.narrow-stat{flex:1;text-align:center;padding:0 8px;}
+.narrow-stat+.narrow-stat{border-left:1px solid rgba(255,255,255,.15);}
+.narrow-num{font-size:26px;font-weight:700;color:var(--coral);letter-spacing:-1px;line-height:1;}
+.narrow-label{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;line-height:1.4;}
+
+/* ── FORM ── */
+.form-wrap{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:24px;margin-bottom:18px;}
+.frow{margin-bottom:14px;}
+.frow:last-child{margin-bottom:0;}
+.flabel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);display:block;margin-bottom:6px;}
+.finput{width:100%;padding:12px 15px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:'Outfit',sans-serif;color:var(--near-black);background:var(--cream);outline:none;transition:border-color .15s;}
+.finput:focus{border-color:var(--coral);}
+select.finput{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6' fill='%2366645E'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer;}
+textarea.finput{resize:vertical;min-height:80px;}
+
+/* ── NAV ── */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:28px;}
+.btn-back{background:none;border:none;cursor:pointer;font-size:12px;color:var(--grey);font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:5px;padding:8px 0;transition:color .15s;letter-spacing:.3px;}
+.btn-back:hover{color:var(--plum);}
+.btn-go{background:var(--coral);color:var(--white);border:none;border-radius:40px;padding:13px 34px;font-size:14px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .18s;box-shadow:0 4px 14px rgba(242,112,92,.28);opacity:.3;pointer-events:none;letter-spacing:.2px;}
+.btn-go.on{opacity:1;pointer-events:all;}
+.btn-go.on:hover{background:var(--plum);transform:translateY(-1px);box-shadow:0 6px 18px rgba(77,1,33,.22);}
+.btn-go.plum{background:var(--plum);}
+.btn-go.plum:hover{background:var(--plum-lt);}
+.btn-wide{width:100%;border-radius:12px;padding:15px;font-size:15px;margin-top:4px;}
+
+/* ── INTERSTITIAL ── */
+.inter{text-align:center;padding:16px 0;}
+.inter-icon{width:64px;height:64px;background:var(--coral-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+.inter-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:24px 0;}
+.istat{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:16px 10px;text-align:center;}
+.istat-num{font-size:22px;font-weight:700;color:var(--coral);letter-spacing:-.5px;}
+.istat-lbl{font-size:10px;color:var(--grey);margin-top:3px;line-height:1.4;}
+.reviews-col{display:flex;flex-direction:column;gap:9px;margin:20px 0;}
+.savings-bar{background:var(--plum);border-radius:10px;padding:18px 22px;display:flex;gap:24px;flex-wrap:wrap;}
+.sav-item .sav-num{font-size:20px;font-weight:700;color:var(--white);}
+.sav-item .sav-lbl{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
+
+/* ── CONFIRM ── */
+.conf-check{width:60px;height:60px;background:var(--coral-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+.what-next{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:22px;margin-bottom:18px;}
+.ni{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;}
+.ni:last-child{margin-bottom:0;}
+.ni-num{width:26px;height:26px;background:var(--coral);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--white);flex-shrink:0;}
+.ni-title{font-size:13px;font-weight:600;color:var(--plum);margin-bottom:2px;}
+.ni-desc{font-size:12px;color:var(--grey);line-height:1.5;}
+
+@media(max-width:480px){
+  .grid2,.circle-grid{grid-template-columns:1fr;}
+  .inter-stats{grid-template-columns:1fr 1fr;}
+  .topbar{padding:12px 18px;}
+  .prog-wrap{margin:0 14px;}
+  .wrap{padding:36px 18px 80px;}
+  .qtitle{font-size:22px;}
+}
+
+/* SVG ICONS — inline helpers */
+.ic{display:block;width:20px;height:20px;}
+</style>
+</head>
+<body>
+
+
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">p<em>i</em>rk</div>
+  <div class="prog-wrap">
+    <div class="prog-text" id="prog-label">Let's get started</div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:6%"></div></div>
+  </div>
+  <div class="step-ct" id="prog-ct">Step 1 of 16</div>
+</div>
+
+<div class="wrap">
+
+<!-- ════════════════════════════════
+     S1 — AREA
+════════════════════════════════ -->
+<div class="screen on" id="s1">
+  <div class="eyebrow">Welcome to Pirk</div>
+  <div class="qtitle">What area are you thinking about?</div>
+  <div class="qsub">No commitment — we just want to point you in the right direction.</div>
+  <div class="grid2">
+    <div class="tile" onclick="setArea('breast');goDir(2)">
+      <div class="tile-icon">
+        <svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6.5" cy="11" r="5" stroke="#F2705C" stroke-width="1.5"/><circle cx="13.5" cy="11" r="5" stroke="#F2705C" stroke-width="1.5"/></svg>
+      </div>
+      <div class="tile-title">Breast</div>
+      <div class="tile-sub">Augmentation, lift, reduction & more</div>
+    </div>
+    <div class="tile" onclick="setArea('face');goDir('2f')">
+      <div class="tile-icon">
+        <svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="5.5" ry="7" stroke="#F2705C" stroke-width="1.5"/><circle cx="10" cy="5" r="3" stroke="#F2705C" stroke-width="1.5"/></svg>
+      </div>
+      <div class="tile-title">Face</div>
+      <div class="tile-sub">Rhinoplasty, eyes, brow & more</div>
+    </div>
+    <div class="tile" onclick="setArea('body');goDir('2b')">
+      <div class="tile-icon">
+        <svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="10" rx="5" ry="7.5" stroke="#F2705C" stroke-width="1.5"/></svg>
+      </div>
+      <div class="tile-title">Body</div>
+      <div class="tile-sub">Tummy, lipo, body contouring</div>
+    </div>
+    <div class="tile" onclick="setArea('notsure');goDir(4)">
+      <div class="tile-icon">
+        <svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14.5" text-anchor="middle" font-size="9" fill="#F2705C" font-family="Outfit">?</text></svg>
+      </div>
+      <div class="tile-title">Not sure yet</div>
+      <div class="tile-sub">We'll help you figure it out</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     S2 — BREAST PROCEDURE (click → go)
+════════════════════════════════ -->
+<div class="screen" id="s2">
+  <div class="eyebrow">Breast procedures</div>
+  <div class="qtitle">Which procedure are you considering?</div>
+  <div class="qsub">Not sure of the name? Read the descriptions below — we'll help you figure out what fits your goals.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="setProc('aug');goDir('3a')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6.5" cy="11" r="5" stroke="#F2705C" stroke-width="1.5"/><circle cx="13.5" cy="11" r="5" stroke="#F2705C" stroke-width="1.5"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Breast Augmentation</div>
+        <div class="opt-also">Also known as: boob job, implants, breast enlargement</div>
+        <div class="opt-sub">Implants or fat transfer to increase size, improve shape or restore volume lost after pregnancy or weight changes.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('lift');goDir('3b')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 14 Q10 4 16 14" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 11 l3-5 3 5" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Breast Lift</div>
+        <div class="opt-also">Also known as: mastopexy, perkiness surgery</div>
+        <div class="opt-sub">Reshapes and lifts breasts that have sagged due to age, gravity or pregnancy. No implants needed — it's about position, not size.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('reduction');goDir('3c')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6.5" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><circle cx="13.5" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><path d="M5 7h10" stroke="#F2705C" stroke-width="1.2"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Breast Reduction</div>
+        <div class="opt-also">Also known as: reduction mammoplasty, going smaller</div>
+        <div class="opt-sub">Removes excess breast tissue and skin to create smaller, lighter breasts. Often Medicare-eligible when physical discomfort is involved.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('combo');goDir('3d')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><circle cx="14" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><path d="M10 8v-4m-2 2l2-2 2 2" stroke="#F2705C" stroke-width="1.2"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-badge coral">Popular</div>
+        <div class="opt-title">Combination Procedure</div>
+        <div class="opt-also">e.g. Aug + Lift (mummy makeover), Lift + Reduction</div>
+        <div class="opt-sub">Two procedures together — more efficient and cost-effective than staging them separately.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('revision');goDir('3e')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 a6 6 0 1 1 2 4.5" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M4 14.5 l0-4 4 0" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Implant Revision, Removal or Replacement</div>
+        <div class="opt-also">Also known as: explant, implant exchange, secondary surgery</div>
+        <div class="opt-sub">Removing, replacing or correcting existing implants due to complications, ageing, size change or capsular contracture.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(1)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S3a — AUG GOAL
+════════════════════════════════ -->
+<div class="screen" id="s3a">
+  <div class="eyebrow">Breast augmentation</div>
+  <div class="qtitle">What result are you hoping for?</div>
+  <div class="qsub">Be honest — <strong>there's no wrong answer.</strong> This is how we match you with surgeons who specialise in your exact goals.</div>
+  <div class="circle-grid">
+    <div class="crd" onclick="go(4)"><div class="circles"><div class="cb" style="width:24px;height:24px"></div><div class="ca" style="width:28px;height:28px"></div></div><div class="crd-title">Natural & subtle</div><div class="crd-sub">Small change — still undeniably me</div></div>
+    <div class="crd" onclick="go(4)"><div class="circles"><div class="cb" style="width:24px;height:24px"></div><div class="ca" style="width:38px;height:38px"></div></div><div class="crd-title">Noticeably fuller</div><div class="crd-sub">A cup size or two — visible but not obvious</div></div>
+    <div class="crd" onclick="go(4)"><div class="circles"><div class="cb" style="width:24px;height:24px"></div><div class="ca" style="width:48px;height:48px"></div></div><div class="crd-title">Significantly larger</div><div class="crd-sub">An obvious, intentional transformation</div></div>
+    <div class="crd" onclick="go(4)"><div class="circles"><div class="cb" style="width:36px;height:36px"></div><div class="ca" style="width:22px;height:22px"></div></div><div class="crd-title">Restore what I had</div><div class="crd-sub">Volume lost after pregnancy or weight changes</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(2)">← Back</button><div></div></div>
+</div>
+
+<!-- 3b LIFT -->
+<div class="screen" id="s3b">
+  <div class="eyebrow">Breast lift</div>
+  <div class="qtitle">What outcome matters most?</div>
+  <div class="qsub">A lift is about <strong>position and shape</strong> — not size.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M10 16V6m-4 4l4-4 4 4" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Perkiness & position</div><div class="opt-sub">I want them sitting higher — gravity has done its thing</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="8" r="4" stroke="#F2705C" stroke-width="1.5"/><path d="M5 18 Q10 13 15 18" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Post-pregnancy restoration</div><div class="opt-sub">Pregnancy and breastfeeding changed my shape significantly</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M10 3v14" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Symmetry & shape</div><div class="opt-sub">One sits differently, or the overall shape has changed</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Still figuring it out</div><div class="opt-sub">Not sure if I need a lift, implants, or both — I need guidance</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(2)">← Back</button><div></div></div>
+</div>
+
+<!-- 3c REDUCTION -->
+<div class="screen" id="s3c">
+  <div class="eyebrow">Breast reduction</div>
+  <div class="qtitle">What's driving your decision?</div>
+  <div class="qsub">This helps us find the right surgeon — and check whether you may be <strong>eligible for a Medicare rebate.</strong></div>
+  <div class="info-block green"><p><strong>Worth asking your doctor about.</strong> Some procedures — particularly those involving physical symptoms — may qualify for Medicare rebates or other funding. Your GP or surgeon can advise what applies to your situation. We can help you prepare the right questions to ask.</p></div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M10 3v9m-4-4l4 4 4-4" stroke="#F2705C" stroke-width="1.5"/><path d="M4 17h12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Physical discomfort</div><div class="opt-sub">Back, neck or shoulder pain, skin irritation, posture issues</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M7 10h6M10 7v6" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Confidence & proportion</div><div class="opt-sub">Feel more like myself — clothing fits better, feel lighter</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3" stroke="#F2705C" stroke-width="1.5"/><path d="M6 19v-4a4 4 0 0 1 8 0v4" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Lifestyle limitations</div><div class="opt-sub">Exercise and movement is uncomfortable or restricted</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4v12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">All of the above</div><div class="opt-sub">It's affecting my body and my confidence equally</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(2)">← Back</button><div></div></div>
+</div>
+
+<!-- 3d COMBO -->
+<div class="screen" id="s3d">
+  <div class="eyebrow">Combination procedure</div>
+  <div class="qtitle">What combination are you thinking?</div>
+  <div class="qsub">Doing procedures together is usually more efficient <strong>and</strong> more cost-effective than staging them separately.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><circle cx="14" cy="12" r="4" stroke="#F2705C" stroke-width="1.5"/><path d="M8 7l2-3 2 3" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-badge coral">Most popular</div><div class="opt-title">Augmentation + Lift</div><div class="opt-sub">Add volume AND restore position — common after pregnancy. Often called a mummy makeover (breast component).</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="6.5" cy="12" r="3.5" stroke="#F2705C" stroke-width="1.5"/><circle cx="13.5" cy="12" r="3.5" stroke="#F2705C" stroke-width="1.5"/><path d="M5 7h10M10 7V4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Reduction + Lift</div><div class="opt-sub">Reduce size AND reshape for a lifted, proportionate result. Medicare eligibility may apply.</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="12" rx="6" ry="5" stroke="#F2705C" stroke-width="1.5"/><path d="M7 7l3-4 3 4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Full mummy makeover</div><div class="opt-sub">Breast + body (tummy, liposuction). Can be combined or staged depending on your surgeon's recommendation.</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Not sure yet</div><div class="opt-sub">I know I want to address multiple things — I'd love guidance on what makes sense.</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(2)">← Back</button><div></div></div>
+</div>
+
+<!-- 3e REVISION -->
+<div class="screen" id="s3e">
+  <div class="eyebrow">Implant revision or removal</div>
+  <div class="qtitle">What's behind your decision?</div>
+  <div class="qsub">More common than you think. Choosing the right surgeon for revision work is <strong>especially</strong> important — we find surgeons with specific revision experience.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="4" y="3" width="12" height="14" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M7 8h6M7 12h4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Ageing implants</div><div class="opt-sub">My implants are old and it's time to update or remove them</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M10 4v6l4 2" stroke="#F2705C" stroke-width="1.5"/><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Complications</div><div class="opt-sub">Capsular contracture, rippling, asymmetry or other issues</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 a6 6 0 1 1 1.8 4.2" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M4 14.2l0-4.2 4.2 0" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Size or style change</div><div class="opt-sub">I want to go bigger, smaller, or switch implant type</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M7 10h6" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Full removal (explant)</div><div class="opt-sub">I want them out completely — health, lifestyle or personal reasons</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(2)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S4 — PRIORITIES (chips)
+════════════════════════════════ -->
+<div class="screen" id="s4">
+  <div class="eyebrow">Your priorities</div>
+  <div class="qtitle">What matters most when choosing a surgeon?</div>
+  <div class="qsub">Choosing a surgeon involves accreditation, hospital privileges, reviews, costs, wait times and more.</div>
+  <div class="qnote">Select all that apply</div>
+  <div class="review-strip"><div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="review-text">"They made me feel completely comfortable discussing my goals and took the time to explain every step clearly and honestly. Their knowledge and care went above and beyond."</div><div class="review-name">Amanda Joyce · Verified Google Review</div></div>
+  <div class="chips" id="ch4">
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>FRACS Accreditation</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Patient Reviews</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Before & After Photos</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Cost & Pricing</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Wait Times</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Payment Plans</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Surgeon Experience</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Revision Policy</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Location / Proximity</div>
+    <div class="chip" onclick="tog(this,'ch4','b4')"><div class="chip-dot"></div>Hospital Quality</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="goBackProc()">← Back</button><button class="btn-go" id="b4" onclick="leadData.priorities=captureChips('ch4');go(5)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S5 — SURGEON PREFERENCES (chips)
+════════════════════════════════ -->
+<div class="screen" id="s5">
+  <div class="eyebrow">Surgeon preferences</div>
+  <div class="qtitle">What matters most in a surgeon?</div>
+  <div class="qnote">Select all that apply</div>
+  <div class="chips" id="ch5">
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Female surgeon</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Highly experienced</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Known for natural results</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Fast availability</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Premium hospital</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Warm bedside manner</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>Strong post-op care</div>
+    <div class="chip" onclick="tog(this,'ch5','b5')"><div class="chip-dot"></div>I'm not sure yet</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(4)">← Back</button><button class="btn-go" id="b5" onclick="leadData.surgeon_preferences=captureChips('ch5');go('age')">Continue →</button></div>
+</div>
+
+
+<!-- ════════════════════════════════
+     SAGE — AGE BRACKET
+════════════════════════════════ -->
+<div class="screen" id="sage">
+  <div class="eyebrow">About you</div>
+  <div class="qtitle">What&apos;s your age bracket?</div>
+  <div class="qsub">This helps us match surgeons with experience across different age groups and skin types — it shapes the approach as much as the procedure itself.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="leadData.age_bracket='18-24';go(6)"><div class="opt-body"><div class="opt-title">18 – 24</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="leadData.age_bracket='25-34';go(6)"><div class="opt-body"><div class="opt-title">25 – 34</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="leadData.age_bracket='35-44';go(6)"><div class="opt-body"><div class="opt-title">35 – 44</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="leadData.age_bracket='45-54';go(6)"><div class="opt-body"><div class="opt-title">45 – 54</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="leadData.age_bracket='55+';go(6)"><div class="opt-body"><div class="opt-title">55+</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="leadData.age_bracket='prefer_not_to_say';go(6)"><div class="opt-body"><div class="opt-title">Prefer not to say</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(5)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S6 — CONSULTED / SURGEON IN MIND
+════════════════════════════════ -->
+<div class="screen" id="s6">
+  <div class="eyebrow">Where are you at?</div>
+  <div class="qtitle">Have you had a consultation yet?</div>
+  <div class="qsub">We work with people at every stage — from just starting out to those who've already seen surgeons.</div>
+  <div class="opt-list" id="s6opts">
+    <div class="opt" onclick="pickConsult('no',this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">No — I'm still researching</div><div class="opt-sub">I haven't spoken to any surgeons yet</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="pickConsult('yes',this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10l4 4 8-8" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Yes — I've had at least one consult</div><div class="opt-sub">I've seen a surgeon but I'm not sure they're the right fit</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="pickConsult('mind',this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="4" stroke="#F2705C" stroke-width="1.5"/><path d="M4 18 Q10 13 16 18" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">I have a surgeon in mind</div><div class="opt-sub">I'd like Pirk to vet them before I commit</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="pickConsult('multi',this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 a6 6 0 1 1 2 4.5" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M4 14.5l0-4 4 0" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">I've seen multiple surgeons</div><div class="opt-sub">Still undecided — I need an objective perspective</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <!-- Surgeon detail sub-form -->
+  <div id="surgeon-detail" style="display:none;margin-top:14px;background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:20px;">
+    <div style="font-size:13px;font-weight:600;color:var(--plum);margin-bottom:12px;">Tell us about the surgeon you have in mind</div>
+    <div class="frow"><label class="flabel">Surgeon name or clinic (optional)</label><input type="text" class="finput" placeholder="e.g. Dr Smith, XYZ Clinic"></div>
+    <div class="frow"><label class="flabel">Why are you considering them?</label><textarea class="finput" placeholder="e.g. saw their work on Instagram, recommended by a friend..."></textarea></div>
+    <div style="font-size:11px;color:var(--grey);margin-top:4px;">We'll run them through our full vetting process — credentials, patient history, pricing fairness and clinic standards.</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('age')">← Back</button><button class="btn-go" id="b6" onclick="const si=document.querySelector('#surgeon-detail input');if(si)leadData.surgeon_in_mind=si.value.trim();go(7)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S7 — WHAT'S STOPPED YOU
+════════════════════════════════ -->
+<div class="screen" id="s7">
+  <div class="eyebrow">Let's be honest</div>
+  <div class="qtitle">What's stopped you from moving forward before?</div>
+  <div class="qsub">The more honest you are, the better we can help. <strong>We've heard it all</strong> — there's nothing to be embarrassed about.</div>
+  <div class="narrow-block">
+    <div class="narrow-stat"><div class="narrow-num">2,400+</div><div class="narrow-label">People have come to us with exactly this question</div></div>
+    <div class="narrow-stat"><div class="narrow-num">350+</div><div class="narrow-label">We've guided through to surgery successfully</div></div>
+  </div>
+  <div class="qnote">Select all that apply</div>
+  <div class="chips" id="ch7">
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Cost & affordability</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Fear of the wrong result</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Don't know who to trust</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Fear of surgery itself</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Timing wasn't right</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Overwhelmed by information</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Couldn't access finance</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Worried about judgement</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Didn't know where to start</div>
+    <div class="chip" onclick="tog(this,'ch7','b7')"><div class="chip-dot"></div>Nothing — I'm ready now</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(6)">← Back</button><button class="btn-go" id="b7" onclick="leadData.blockers=captureChips('ch7');go(8)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S8 — MEDICARE / SUPER
+════════════════════════════════ -->
+<div class="screen" id="s8">
+  <div class="eyebrow">Funding & costs</div>
+  <div class="qtitle">Do any of these apply to you?</div>
+  <div class="qsub">Some situations may open up additional funding pathways. This helps us make sure we're asking the right questions on your behalf — but always discuss eligibility with your GP or surgeon.</div>
+  <div class="info-block green"><p><strong>Good to know.</strong> Depending on your situation, there may be funding options worth exploring — including Medicare rebates, early super access, or payment plans. Your GP or surgeon will confirm what applies. We help you ask the right questions and connect you with the right resources.</p></div>
+  <div class="qnote">Select all that apply</div>
+  <div class="chips" id="ch8">
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>I have physical symptoms (pain, discomfort)</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>My GP has mentioned surgery as an option</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>Post-pregnancy or post-weight loss procedure</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>Reconstructive or medically related</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>I'd like to explore super access options</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>I'd like help understanding my funding options</div>
+    <div class="chip" onclick="tog(this,'ch8','b8')"><div class="chip-dot"></div>None of these apply</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(7)">← Back</button><button class="btn-go" id="b8" onclick="leadData.medicare_super=captureChips('ch8');go(9)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S9 — SUPPORT NEEDED
+════════════════════════════════ -->
+<div class="screen" id="s9">
+  <div class="eyebrow">How we can help</div>
+  <div class="qtitle">What support do you need from Pirk?</div>
+  <div class="qnote">Select all that apply — we do as much or as little as you need</div>
+  <div class="review-strip"><div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="review-text">"To have someone by your side to support you along the whole journey is very reassuring. They do all the hard work for you and find all the best options suited to your needs."</div><div class="review-name">BOB Ing · Verified Google Review</div></div>
+  <div class="chips" id="ch9">
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Find & vet the right surgeon</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Review & negotiate my quote</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Book my consultations</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Medicare guidance & paperwork</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Super access guidance</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Help with finance / payment plan</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Vet a surgeon I already have in mind</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Prepare me for my consultation</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Post-surgery support & check-ins</div>
+    <div class="chip" onclick="tog(this,'ch9','b9')"><div class="chip-dot"></div>Help communicating with my surgeon</div>
+    <div class="chip sel" onclick="tog(this,'ch9','b9')" id="ch9-all" style="border-color:var(--plum);background:var(--plum);color:var(--white);"><div class="chip-dot" style="background:var(--coral)"></div>All of the above</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(8)">← Back</button><button class="btn-go on" id="b9" onclick="go(10)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S10 — PAYMENT PLAN
+════════════════════════════════ -->
+<div class="screen" id="s10">
+  <div class="eyebrow">Making it happen</div>
+  <div class="qtitle">Are you looking for a payment plan?</div>
+  <div class="qsub">Through our partnership with TLC Finance, we can get you pre-approved in <strong>48 hours</strong> — no impact on your credit score to check.</div>
+  <div class="info-block"><p><strong>You don't have to wait until you've saved up.</strong> Full Support is available from ~$58/month. Your surgical costs can also be spread. Pre-approval in 48 hours, no surprises.</p></div>
+  <div class="opt-list">
+    <div class="opt" onclick="goCapture('payment_plan',11,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M3 9h14" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Yes — I'd love payment plan options</div><div class="opt-sub">Please pre-qualify me through TLC Finance</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('payment_plan',11,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">No — I'll be paying upfront</div><div class="opt-sub">I have the funds ready when the time comes</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('payment_plan',11,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Not sure yet</div><div class="opt-sub">I'd like to understand my options before deciding</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(9)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S11 — TIMELINE
+════════════════════════════════ -->
+<div class="screen" id="s11">
+  <div class="eyebrow">Your timeline</div>
+  <div class="qtitle">When are you hoping to have surgery?</div>
+  <div class="qsub">No pressure — this helps us match surgeons with the right availability for you.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="goCapture('timeline',12,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">As soon as possible</div><div class="opt-sub">I'm ready to move — within the next 1–3 months</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('timeline',12,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="4" y="4" width="12" height="13" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M8 3v2M12 3v2M4 9h12" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">In the next 3–6 months</div><div class="opt-sub">I'm researching and want to be booked within that window</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('timeline',12,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="4" y="4" width="12" height="13" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M8 3v2M12 3v2M4 9h12M8 13h4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Later this year or next</div><div class="opt-sub">I'm planning ahead — 6–12 months from now</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('timeline',12,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Just exploring for now</div><div class="opt-sub">No firm timeline — I'm in early research mode</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(10)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S12 — BUDGET
+════════════════════════════════ -->
+<div class="screen" id="s12">
+  <div class="eyebrow">Your budget</div>
+  <div class="qtitle">What's your rough budget in mind?</div>
+  <div class="qsub">Surgical pricing in Australia varies a lot. This helps us set realistic expectations — and flag if <strong>Medicare or payment plans</strong> could help.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="goCapture('budget',13,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="3" y="5" width="14" height="10" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M3 9h14" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Under $8,000</div><div class="opt-sub">I'll need payment plan options — let's explore what's available</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('budget',13,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M10 6v8M7 8h5a1.5 1.5 0 0 1 0 3H8a1.5 1.5 0 0 0 0 3h5" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">$8,000 – $15,000</div><div class="opt-sub">Mid-range — best value for a quality result</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('budget',13,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M10 3l2 4 4.5.6-3.3 3.2.8 4.5L10 13l-4 2.3.8-4.5L3.5 7.6l4.5-.6z" stroke="#F2705C" stroke-width="1.3" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">$15,000+</div><div class="opt-sub">I'm happy to invest in the best surgeon for my situation</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('budget',13,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Not sure yet</div><div class="opt-sub">I'd like help understanding what to expect</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(11)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S13 — LOCATION
+════════════════════════════════ -->
+<div class="screen" id="s13">
+  <div class="eyebrow">Your location</div>
+  <div class="qtitle">Where are you based?</div>
+  <div class="qsub">We work with surgeons Australia-wide. If we don't have someone in your area yet, <strong>we'll go and find them.</strong></div>
+  <div class="chips" id="ch13">
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Sydney / NSW</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Melbourne / VIC</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Brisbane / QLD</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Perth / WA</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Adelaide / SA</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>ACT / Canberra</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Darwin / NT</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Hobart / TAS</div>
+    <div class="chip" onclick="tog(this,'ch13','b13')"><div class="chip-dot"></div>Regional / Rural</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(12)">← Back</button><button class="btn-go" id="b13" onclick="go(14)">Continue →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S14 — TRAVEL
+════════════════════════════════ -->
+<div class="screen" id="s14">
+  <div class="eyebrow">Travel preferences</div>
+  <div class="qtitle">Are you open to travelling for the right surgeon?</div>
+  <div class="qsub">The best surgeon for you might not always be in your city. Some of our best matches are a short flight away.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="goCapture('travel',15,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 Q10 3 16 10 Q10 17 4 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/><circle cx="10" cy="10" r="2.5" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Same city only</div><div class="opt-sub">I need my surgeon to be locally accessible</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('travel',15,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M10 3v14" stroke="#F2705C" stroke-width="1.5"/><circle cx="10" cy="10" r="4" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Open to interstate travel</div><div class="opt-sub">I'd travel if the surgeon is clearly the right fit</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('travel',15,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 15 L10 4 L15 15" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7.5 11h5" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Happy to fly anywhere in Australia</div><div class="opt-sub">Location is no barrier — the best result is what matters</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="goCapture('travel',15,this)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><path d="M6 10 q4-6 8 0" stroke="#F2705C" stroke-width="1.2" fill="none"/><path d="M6 10 q4 6 8 0" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Considering international options</div><div class="opt-sub">I'd like to explore overseas options as part of my research</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(13)">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S15 — INTERSTITIAL
+════════════════════════════════ -->
+<div class="screen" id="s15">
+  <div class="inter">
+    <div class="inter-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10" stroke="#F2705C" stroke-width="2"/><path d="M11 16l3.5 3.5 6.5-7" stroke="#F2705C" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="eyebrow" style="text-align:center;">Narrowing your match</div>
+    <div class="qtitle" style="text-align:center;margin-bottom:10px;">We're already thinking about who's right for you.</div>
+    <div class="qsub" style="text-align:center;">Based on everything you've shared, we're filtering from <strong>400+ assessed surgeons</strong> down to the 1–3 who genuinely fit your goals, location and budget.</div>
+
+    <div class="inter-stats">
+      <div class="istat"><div class="istat-num">400+</div><div class="istat-lbl">Surgeons assessed by Pirk</div></div>
+      <div class="istat"><div class="istat-num">350+</div><div class="istat-lbl">Successful matches made</div></div>
+      <div class="istat"><div class="istat-num">5.0★</div><div class="istat-lbl">Google rating (50+ reviews)</div></div>
+    </div>
+
+    <div class="reviews-col">
+      <div class="review-strip"><div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="review-text">"If it wasn't for the team I would have no idea on how to go about making a decision on the right surgeon for me. I came out feeling confident and happy — all my questions were answered."</div><div class="review-name">Breeze Hughes · Verified Google Review</div></div>
+      <div class="review-strip"><div class="review-stars"><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div><div class="star"></div></div><div class="review-text">"I have been putting off getting this surgery because I didn't know where to start. They made it so clear and I wish I had booked in sooner."</div><div class="review-name">Chloe Holland · Verified Google Review</div></div>
+    </div>
+
+    <div class="savings-bar">
+      <div class="sav-item"><div class="sav-num">50–70+ hrs</div><div class="sav-lbl">of research saved</div></div>
+      <div class="sav-item"><div class="sav-num">$6k–$15k+</div><div class="sav-lbl">in avoidable costs</div></div>
+      <div class="sav-item"><div class="sav-num">Months</div><div class="sav-lbl">of indecision avoided</div></div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(14)">← Back</button><button class="btn-go on plum" onclick="go(16)" style="padding:13px 28px;font-size:14px;">See my options →</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S16 — EMAIL + NAME CAPTURE
+════════════════════════════════ -->
+<div class="screen" id="s16">
+  <!-- Hero image banner -->
+  <div style="border-radius:14px;overflow:hidden;margin-bottom:24px;position:relative;height:180px;background:linear-gradient(135deg,#c47a6a 0%,#9e5a6e 50%,#7a3050 100%);">
+    <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:22px 24px;background:linear-gradient(to top,rgba(77,1,33,.7) 0%,transparent 60%);">
+      <div style="font-size:19px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:4px;">Your matches are ready.</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.8);">Where should we send your personalised report?</div>
+    </div>
+  </div>
+  <div class="form-wrap">
+    <div class="frow"><label class="flabel">Your name</label><input type="text" id="inp-name" class="finput" placeholder="Enter your first name" oninput="chk16()"></div>
+    <div class="frow" style="margin-bottom:0"><label class="flabel">Your email</label><input type="email" id="inp-email" class="finput" placeholder="you@example.com" oninput="chk16()"></div>
+  </div>
+  <div style="font-size:11px;color:var(--grey);text-align:center;margin:12px 0 18px;">
+    <svg style="display:inline;vertical-align:middle;margin-right:4px;" width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>
+    We'll never spam you. Unsubscribe anytime.
+  </div>
+  <button class="btn-go btn-wide" id="b16" onclick="leadData.name=document.getElementById('inp-name').value.trim();leadData.email=document.getElementById('inp-email').value.trim();go(17)" style="margin-top:0;">Get My Matches →</button>
+  <div class="nav" style="margin-top:14px;justify-content:flex-start;"><button class="btn-back" onclick="go(15)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S17 — PHONE CAPTURE
+════════════════════════════════ -->
+<div class="screen" id="s17">
+  <div style="text-align:center;padding:8px 0 24px;">
+    <div style="width:54px;height:54px;background:var(--coral-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8a14.4 14.4 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1v3.4a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.4a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .6 3.6 1 1 0 0 1-.24 1z" stroke="#F2705C" stroke-width="1.6" fill="none"/></svg>
+    </div>
+    <div class="qtitle" style="text-align:center;font-size:22px;margin-bottom:12px;">Almost there — we need your number.</div>
+    <div class="qsub" style="text-align:center;max-width:400px;margin:0 auto 28px;">Your matches are ready. We'll call you within 24 hours to walk you through your options, answer your questions, and help you decide what level of support is right for you.</div>
+  </div>
+  <div class="form-wrap">
+    <div class="frow" style="margin-bottom:0">
+      <label class="flabel">Your phone number</label>
+      <div style="position:relative;">
+        <div style="position:absolute;left:14px;top:50%;transform:translateY(-50%);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8a14.4 14.4 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.6 1 1 0 0 1 1 1v3.4a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.4a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .6 3.6 1 1 0 0 1-.24 1z" stroke="#66645E" stroke-width="1.6" fill="none"/></svg>
+        </div>
+        <input type="tel" id="inp-phone" class="finput" placeholder="04XX XXX XXX" style="padding-left:36px;">
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:20px;justify-content:center;margin:14px 0 22px;">
+    <div style="font-size:11px;color:var(--grey);display:flex;align-items:center;gap:5px;">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M6 3v3l2 1.5" stroke="#66645E" stroke-width="1.2"/></svg>
+      5 mins max
+    </div>
+    <div style="font-size:11px;color:var(--grey);display:flex;align-items:center;gap:5px;">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>
+      No pressure, ever
+    </div>
+  </div>
+  <button class="btn-go on btn-wide" onclick="go(18)" style="margin-top:0;">See My Matches →</button>
+  <div style="text-align:center;margin-top:14px;">
+    <button onclick="go(18)" style="background:none;border:none;font-size:12px;color:var(--grey);text-decoration:underline;cursor:pointer;font-family:'Outfit',sans-serif;">Continue without a number (note: we won't be able to call you)</button>
+  </div>
+  <div class="nav" style="margin-top:10px;justify-content:flex-start;"><button class="btn-back" onclick="go(16)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S18 — THREE PACKAGES OPTIONS
+════════════════════════════════ -->
+<div class="screen" id="s18">
+
+  <!-- Hero heading -->
+  <div style="text-align:center;margin-bottom:20px;">
+    <div class="eyebrow" style="text-align:center;">Your results are ready</div>
+    <div style="font-size:22px;font-weight:700;color:var(--plum);line-height:1.2;margin-bottom:8px;">Your matches are waiting.<br>Pick how much support you want.</div>
+    <div style="font-size:13px;color:var(--grey);line-height:1.55;">We've done the research. Now choose how much of the journey<br>you want handled for you.</div>
+  </div>
+
+  <!-- Blurred surgeon preview strip -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px;">
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:8px;right:8px;background:var(--coral);color:#fff;font-size:8px;font-weight:700;border-radius:20px;padding:2px 6px;">94%</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#c9a89a,#a07060);margin:0 auto 8px;"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--plum);margin-bottom:2px;">Dr. XXXXX</div>
+      <div style="display:flex;gap:2px;justify-content:center;margin-bottom:5px;"><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div></div>
+      <div style="font-size:8px;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">#1 Top Match</div>
+      <div style="height:6px;background:var(--border);border-radius:3px;margin-bottom:4px;filter:blur(3px);"></div>
+      <div style="height:6px;background:var(--border);border-radius:3px;width:65%;margin:0 auto;filter:blur(3px);"></div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;position:relative;opacity:.8;">
+      <div style="position:absolute;top:8px;right:8px;background:var(--plum);color:#fff;font-size:8px;font-weight:700;border-radius:20px;padding:2px 6px;">89%</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#9a9a8a,#6a6a5a);margin:0 auto 8px;"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--plum);margin-bottom:2px;">Dr. XXXXX</div>
+      <div style="display:flex;gap:2px;justify-content:center;margin-bottom:5px;"><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div></div>
+      <div style="font-size:8px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">#2 Strong Match</div>
+      <div style="height:6px;background:var(--border);border-radius:3px;margin-bottom:4px;filter:blur(3px);"></div>
+      <div style="height:6px;background:var(--border);border-radius:3px;width:65%;margin:0 auto;filter:blur(3px);"></div>
+    </div>
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:12px 8px;text-align:center;position:relative;opacity:.6;">
+      <div style="position:absolute;top:8px;right:8px;background:#a0a090;color:#fff;font-size:8px;font-weight:700;border-radius:20px;padding:2px 6px;">83%</div>
+      <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#b0a898,#8a7a6a);margin:0 auto 8px;"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--plum);margin-bottom:2px;">Dr. XXXXX</div>
+      <div style="display:flex;gap:2px;justify-content:center;margin-bottom:5px;"><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div><div class="star" style="width:8px;height:8px;"></div></div>
+      <div style="font-size:8px;font-weight:700;color:var(--grey);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;">#3 Great Match</div>
+      <div style="height:6px;background:var(--border);border-radius:3px;margin-bottom:4px;filter:blur(3px);"></div>
+      <div style="height:6px;background:var(--border);border-radius:3px;width:65%;margin:0 auto;filter:blur(3px);"></div>
+    </div>
+  </div>
+
+  <!-- ── SIDE-BY-SIDE CARDS (scroll horizontally on small screens) ── -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:6px;align-items:start;">
+
+    <!-- CARD 1: The Matching -->
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px 12px;display:flex;flex-direction:column;">
+      <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:5px;">Get started</div>
+      <div style="font-size:14px;font-weight:700;color:var(--plum);margin-bottom:10px;line-height:1.2;">The Matching</div>
+      <div style="margin-bottom:1px;display:flex;align-items:baseline;gap:3px;">
+        <span style="font-size:26px;font-weight:700;color:var(--plum);">$0.82</span><span style="font-size:11px;color:var(--grey);">/day</span>
+      </div>
+      <div style="font-size:10px;color:var(--grey);margin-bottom:2px;">$149 total</div>
+      <div style="font-size:9px;color:var(--coral);font-weight:600;margin-bottom:12px;">or 4 × $49</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;flex:1;">
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Top 3 matched surgeons</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Full profiles unlocked</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Advisor call included</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Full refund if no match</div>
+      </div>
+      <button onclick="toggleDetail('det-matching')" style="width:100%;padding:7px;background:none;border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--grey);cursor:pointer;font-family:'Outfit',sans-serif;margin-bottom:8px;" id="btn-det-matching">See what's included ↓</button>
+      <button onclick="goPayment('matching')" style="width:100%;padding:10px;background:var(--white);border:1.5px solid var(--plum);border-radius:30px;font-size:10px;font-weight:600;color:var(--plum);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;" onmouseover="this.style.background='var(--plum)';this.style.color='#fff'" onmouseout="this.style.background='var(--white)';this.style.color='var(--plum)'">See payment options →</button>
+    </div>
+
+    <!-- CARD 2: Full Support (hero — larger) -->
+    <div style="background:var(--plum);border:2px solid var(--plum);border-radius:14px;padding:18px 13px;display:flex;flex-direction:column;position:relative;box-shadow:0 8px 28px rgba(77,1,33,.18);">
+      <div style="position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--coral);color:#fff;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 10px;border-radius:0 0 7px 7px;white-space:nowrap;">Most Popular</div>
+      <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.4);margin-bottom:5px;margin-top:8px;">Full service</div>
+      <div style="font-size:17px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2;">Full Support</div>
+      <div style="margin-bottom:1px;display:flex;align-items:baseline;gap:3px;">
+        <span style="font-size:30px;font-weight:700;color:var(--coral);">$3.28</span><span style="font-size:11px;color:rgba(255,255,255,.5);">/day</span>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.45);margin-bottom:2px;">$599 total</div>
+      <div style="font-size:9px;color:var(--coral);font-weight:600;margin-bottom:12px;">or 6 × $99/mo</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;flex:1;">
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Everything in The Matching</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Dedicated consultant</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Quote negotiation</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Booking managed</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Finance pre-approval</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.9);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Post-surgery support</div>
+      </div>
+      <button onclick="toggleDetail('det-support')" style="width:100%;padding:7px;background:none;border:1px solid rgba(255,255,255,.2);border-radius:20px;font-size:10px;color:rgba(255,255,255,.6);cursor:pointer;font-family:'Outfit',sans-serif;margin-bottom:8px;" id="btn-det-support">See what's included ↓</button>
+      <button onclick="goPayment('support')" style="width:100%;padding:11px;background:var(--coral);border:none;border-radius:30px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 14px rgba(242,112,92,.35);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">See payment options →</button>
+    </div>
+
+    <!-- CARD 3: Custom -->
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;padding:16px 12px;display:flex;flex-direction:column;">
+      <div style="font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:5px;">Complex journeys</div>
+      <div style="font-size:14px;font-weight:700;color:var(--plum);margin-bottom:10px;line-height:1.2;">Custom</div>
+      <div style="margin-bottom:1px;display:flex;align-items:baseline;gap:3px;">
+        <span style="font-size:26px;font-weight:700;color:var(--plum);">$99</span>
+      </div>
+      <div style="font-size:10px;color:var(--grey);margin-bottom:2px;">deposit to start</div>
+      <div style="font-size:9px;color:var(--coral);font-weight:600;margin-bottom:12px;">Custom quote on call</div>
+      <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;flex:1;">
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Everything in Full Support</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Multiple procedures</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Travel & accommodation</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Group & family plans</div>
+        <div style="font-size:10px;color:var(--near-black);display:flex;gap:5px;line-height:1.4;"><span style="color:var(--coral);flex-shrink:0;">✓</span>Overseas surgeons</div>
+      </div>
+      <button onclick="toggleDetail('det-custom')" style="width:100%;padding:7px;background:none;border:1px solid var(--border);border-radius:20px;font-size:10px;color:var(--grey);cursor:pointer;font-family:'Outfit',sans-serif;margin-bottom:8px;" id="btn-det-custom">See what's included ↓</button>
+      <button onclick="goPayment('custom')" style="width:100%;padding:10px;background:var(--white);border:1.5px solid var(--plum);border-radius:30px;font-size:10px;font-weight:600;color:var(--plum);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;" onmouseover="this.style.background='var(--plum)';this.style.color='#fff'" onmouseout="this.style.background='var(--white)';this.style.color='var(--plum)'">See payment options →</button>
+    </div>
+  </div>
+
+  <!-- ── EXPANDABLE COMPARISON TABLE ── -->
+  <div id="det-matching" style="display:none;"></div>
+  <div id="det-support" style="display:none;"></div>
+  <div id="det-custom" style="display:none;"></div>
+
+  <!-- Full comparison table — shown when any "See what's included" is clicked -->
+  <div id="compare-table" style="display:none;margin-top:12px;background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--cream);padding:10px 12px;gap:4px;">
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--grey);"></div>
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--plum);text-align:center;">Matching</div>
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--coral);text-align:center;">Full Support</div>
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--plum);text-align:center;">Custom</div>
+    </div>
+    <style>
+      .ct-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 12px;gap:4px;border-top:1px solid var(--border);align-items:center;}
+      .ct-row:nth-child(even){background:rgba(249,245,242,.5);}
+      .ct-label{font-size:10px;color:var(--near-black);line-height:1.3;}
+      .ct-yes{text-align:center;color:var(--coral);font-size:13px;font-weight:700;}
+      .ct-no{text-align:center;color:#ccc;font-size:13px;}
+    </style>
+    <div class="ct-row"><div class="ct-label">Top 3 surgeon matches</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Full surgeon profiles unlocked</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Advisor call included</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Full refund if no match</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Dedicated consultant</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Quote review & negotiation</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Consultation booking managed</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Finance pre-approval (TLC, 48hrs)</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Medicare & super guidance</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Post-surgery support & scar planning</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Email & communication support</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Your dedicated direct line</div><div class="ct-no">—</div><div class="ct-yes">✓</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Multiple procedures managed</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Group & family plans</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Travel & accommodation support</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Overseas surgeon research</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Post-treatment care planning</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+    <div class="ct-row"><div class="ct-label">Insurance guidance</div><div class="ct-no">—</div><div class="ct-no">—</div><div class="ct-yes">✓</div></div>
+  </div>
+
+  <!-- Not sure CTA -->
+  <div style="text-align:center;padding:16px 18px;background:var(--cream);border:1.5px solid var(--border);border-radius:12px;margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:600;color:var(--plum);margin-bottom:3px;">Not sure which is right for you?</div>
+    <div style="font-size:11px;color:var(--grey);margin-bottom:12px;">We'll figure it out together. No pressure, no pitch.</div>
+    <button onclick="go('chat')" style="padding:10px 24px;background:none;border:1.5px solid var(--coral);border-radius:30px;font-size:12px;font-weight:600;color:var(--coral);cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;" onmouseover="this.style.background='var(--coral)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--coral)'">Book a free 15-min chat to discuss your options →</button>
+  </div>
+
+  <!-- Trust bar -->
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;">
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Full refund if no match</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Secure payment</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>No lock-in</div>
+  </div>
+  <div style="font-size:10px;color:var(--grey);text-align:center;line-height:1.6;margin-bottom:4px;">FRACS Verified · Mystery Shopped · Patient Reviewed · Independently matched</div>
+</div>
+
+<script>
+function toggleDetail(id){
+  const tbl = document.getElementById('compare-table');
+  const isOpen = tbl.style.display !== 'none';
+  // If clicking an already-open section, close it
+  if(isOpen){
+    tbl.style.display='none';
+    document.querySelectorAll('[id^="btn-det-"]').forEach(b=>{b.textContent=b.textContent.replace('↑','↓');});
+  } else {
+    tbl.style.display='block';
+    const btn = document.getElementById('btn-'+id);
+    if(btn) btn.textContent = btn.textContent.replace('↓','↑');
+    tbl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+</script>
+
+<!-- ════════════════════════════════
+     S19 — PAYMENT: THE MATCHING ($149)
+════════════════════════════════ -->
+<div class="screen" id="s19">
+  <div class="eyebrow">The Matching</div>
+  <div class="qtitle" style="margin-bottom:6px;">Choose how you'd like to pay.</div>
+  <div class="qsub">Select a payment option below — you'll be taken to our secure checkout, then straight to your booking call.</div>
+
+  <!-- PIF option -->
+  <div id="pay-pif-matching" class="pay-opt sel" onclick="selPay('matching','pif')" style="background:var(--white);border:2px solid var(--coral);border-radius:14px;padding:20px;margin-bottom:10px;cursor:pointer;transition:all .15s;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--coral);margin-bottom:4px;">Pay in full</div>
+        <div style="font-size:24px;font-weight:700;color:var(--plum);">$149 <span style="font-size:13px;font-weight:400;color:var(--grey);">one-time</span></div>
+        <div style="font-size:11px;color:var(--grey);margin-top:3px;">$0.82/day over 6 months · Best value</div>
+      </div>
+      <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--coral);background:var(--coral);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5"/></svg></div>
+    </div>
+  </div>
+
+  <!-- Installment option -->
+  <div id="pay-inst-matching" class="pay-opt" onclick="selPay('matching','inst')" style="background:var(--white);border:2px solid var(--border);border-radius:14px;padding:20px;margin-bottom:22px;cursor:pointer;transition:all .15s;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:4px;">4 instalments</div>
+        <div style="font-size:24px;font-weight:700;color:var(--plum);">$49 <span style="font-size:13px;font-weight:400;color:var(--grey);">/payment</span></div>
+        <div style="font-size:11px;color:var(--grey);margin-top:3px;">$0.54/day · Total $196 · Fortnightly</div>
+      </div>
+      <div id="dot-inst-matching" style="width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px;"></div>
+    </div>
+  </div>
+
+  <button onclick="go(22)" style="width:100%;padding:14px;background:var(--coral);border:none;border-radius:30px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 16px rgba(242,112,92,.3);">Proceed to Secure Checkout →</button>
+  <div style="display:flex;gap:14px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="2" y="4" width="8" height="7" rx="1.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 4V3a2 2 0 1 1 4 0v1" stroke="#66645E" stroke-width="1.2"/></svg>Secure checkout</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Full refund if no match</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>No lock-in</div>
+  </div>
+  <div class="nav" style="margin-top:14px;"><button class="btn-back" onclick="go(18)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S20 — PAYMENT: FULL SUPPORT ($599)
+════════════════════════════════ -->
+<div class="screen" id="s20">
+  <div class="eyebrow">Full Support</div>
+  <div class="qtitle" style="margin-bottom:6px;">Choose how you'd like to pay.</div>
+  <div class="qsub">Select a payment option — you'll be taken to secure checkout, then straight to your booking call with Chloe.</div>
+
+  <!-- PIF -->
+  <div id="pay-pif-support" class="pay-opt sel" onclick="selPay('support','pif')" style="background:var(--white);border:2px solid var(--coral);border-radius:14px;padding:20px;margin-bottom:10px;cursor:pointer;transition:all .15s;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--coral);margin-bottom:4px;">Pay in full · Best value</div>
+        <div style="font-size:24px;font-weight:700;color:var(--plum);">$599 <span style="font-size:13px;font-weight:400;color:var(--grey);">one-time</span></div>
+        <div style="font-size:11px;color:var(--grey);margin-top:3px;">$3.28/day over 6 months</div>
+      </div>
+      <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--coral);background:var(--coral);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5"/></svg></div>
+    </div>
+  </div>
+
+  <!-- Monthly -->
+  <div id="pay-inst-support" class="pay-opt" onclick="selPay('support','inst')" style="background:var(--white);border:2px solid var(--border);border-radius:14px;padding:20px;margin-bottom:22px;cursor:pointer;transition:all .15s;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--grey);margin-bottom:4px;">6 monthly payments</div>
+        <div style="font-size:24px;font-weight:700;color:var(--plum);">$99 <span style="font-size:13px;font-weight:400;color:var(--grey);">/month</span></div>
+        <div style="font-size:11px;color:var(--grey);margin-top:3px;">$3.28/day · Total $594 · First payment today</div>
+      </div>
+      <div id="dot-inst-support" style="width:20px;height:20px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;margin-top:2px;"></div>
+    </div>
+  </div>
+
+  <button onclick="go(22)" style="width:100%;padding:14px;background:var(--coral);border:none;border-radius:30px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 16px rgba(242,112,92,.3);">Proceed to Secure Checkout →</button>
+  <div style="display:flex;gap:14px;justify-content:center;margin-top:12px;flex-wrap:wrap;">
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="2" y="4" width="8" height="7" rx="1.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 4V3a2 2 0 1 1 4 0v1" stroke="#66645E" stroke-width="1.2"/></svg>Secure checkout</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Full refund if no match</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Cancel anytime</div>
+  </div>
+  <div class="nav" style="margin-top:14px;"><button class="btn-back" onclick="go(18)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S21 — PAYMENT: CUSTOM ($99 deposit)
+════════════════════════════════ -->
+<div class="screen" id="s21">
+  <div class="eyebrow">Custom Support</div>
+  <div class="qtitle" style="margin-bottom:6px;">Secure your custom call.</div>
+  <div class="qsub">A $99 deposit secures your call with Chloe. She'll build a tailored plan around your specific situation — your deposit is credited toward your custom quote.</div>
+
+  <div style="background:var(--plum);border-radius:14px;padding:22px 20px;margin-bottom:22px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.45);margin-bottom:6px;">Custom support deposit</div>
+    <div style="font-size:30px;font-weight:700;color:var(--white);margin-bottom:4px;">$99</div>
+    <div style="font-size:12px;color:rgba(255,255,255,.55);margin-bottom:16px;">Credited toward your full custom plan · No lock-in</div>
+    <div style="border-top:1px solid rgba(255,255,255,.1);margin-bottom:14px;"></div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;gap:8px;font-size:12px;color:rgba(255,255,255,.8);line-height:1.4;"><div style="width:14px;height:14px;background:rgba(242,112,92,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><svg width="7" height="7" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#F2705C" stroke-width="1.3"/></svg></div>Personal call with Chloe to understand your full situation</div>
+      <div style="display:flex;gap:8px;font-size:12px;color:rgba(255,255,255,.8);line-height:1.4;"><div style="width:14px;height:14px;background:rgba(242,112,92,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><svg width="7" height="7" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#F2705C" stroke-width="1.3"/></svg></div>Custom plan built around your needs & budget</div>
+      <div style="display:flex;gap:8px;font-size:12px;color:rgba(255,255,255,.8);line-height:1.4;"><div style="width:14px;height:14px;background:rgba(242,112,92,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><svg width="7" height="7" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#F2705C" stroke-width="1.3"/></svg></div>$99 deposit credited to your full quote — nothing wasted</div>
+      <div style="display:flex;gap:8px;font-size:12px;color:rgba(255,255,255,.8);line-height:1.4;"><div style="width:14px;height:14px;background:rgba(242,112,92,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;"><svg width="7" height="7" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#F2705C" stroke-width="1.3"/></svg></div>No obligation to proceed beyond the call</div>
+    </div>
+  </div>
+
+  <button onclick="go(22)" style="width:100%;padding:14px;background:var(--coral);border:none;border-radius:30px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 16px rgba(242,112,92,.3);">Pay $99 Deposit & Book My Call →</button>
+  <div style="display:flex;gap:14px;justify-content:center;margin-top:12px;">
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="2" y="4" width="8" height="7" rx="1.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 4V3a2 2 0 1 1 4 0v1" stroke="#66645E" stroke-width="1.2"/></svg>Secure checkout</div>
+    <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 6l1.5 1.5 2.5-3" stroke="#66645E" stroke-width="1.2"/></svg>Credited to your plan</div>
+  </div>
+  <div class="nav" style="margin-top:14px;"><button class="btn-back" onclick="go(18)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S22 — PAYMENT GATEWAY PLACEHOLDER
+════════════════════════════════ -->
+<div class="screen" id="s22">
+  <div class="eyebrow">Secure checkout</div>
+  <div class="qtitle" style="margin-bottom:6px;">Complete your payment.</div>
+  <div class="qsub">You'll be redirected to book your call immediately after payment.</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;margin-bottom:18px;">
+    <div style="width:52px;height:52px;background:var(--coral-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="2.5" stroke="#F2705C" stroke-width="1.6"/><path d="M2 11h20" stroke="#F2705C" stroke-width="1.6"/><circle cx="7" cy="15" r="1.5" fill="#F2705C"/></svg>
+    </div>
+    <div style="font-size:15px;font-weight:700;color:var(--plum);margin-bottom:6px;">Payment Gateway</div>
+    <div style="font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:20px;">Connect your Stripe, Square or other payment provider here. This placeholder advances straight to your Calendly booking.</div>
+    <div style="background:var(--cream);border-radius:10px;padding:14px;margin-bottom:20px;text-align:left;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--grey);margin-bottom:8px;">Order summary</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--near-black);font-weight:500;" id="payment-summary-line">
+        <span id="pay-pkg-label">The Matching</span><span id="pay-pkg-amount">$149</span>
+      </div>
+    </div>
+    <button onclick="go(23)" style="width:100%;padding:14px;background:var(--coral);border:none;border-radius:30px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'Outfit',sans-serif;box-shadow:0 4px 16px rgba(242,112,92,.3);">Complete Payment →</button>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;">
+      <div style="font-size:10px;color:var(--grey);display:flex;align-items:center;gap:3px;"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><rect x="2" y="4" width="8" height="7" rx="1.5" stroke="#66645E" stroke-width="1.2"/><path d="M4 4V3a2 2 0 1 1 4 0v1" stroke="#66645E" stroke-width="1.2"/></svg>256-bit SSL encryption</div>
+      <div style="font-size:10px;color:var(--grey);">Visa · Mastercard · Amex</div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="goPayBack()">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     S23 — CALENDLY BOOKING (all packages)
+════════════════════════════════ -->
+<div class="screen" id="s23">
+  <div class="eyebrow" id="cal-eyebrow">Payment confirmed</div>
+  <div class="qtitle" style="margin-bottom:6px;">Now book your call.</div>
+  <div class="qsub" id="cal-sub">Choose a time that works for you. Chloe will come prepared with everything you've shared.</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;">
+    <!-- REPLACE src with your real Calendly URL -->
+    <iframe src="https://calendly.com/pirk/matching-call" width="100%" height="540" frameborder="0" style="border:none;display:block;" title="Book your Pirk call"></iframe>
+  </div>
+  <div class="nav" style="margin-top:14px;"><button class="btn-back" onclick="go(22)">← Back</button></div>
+</div>
+
+<!-- ════════════════════════════════
+     Schat — FREE 15-MIN CHAT (not sure)
+════════════════════════════════ -->
+<div class="screen" id="schat">
+  <div class="eyebrow">No pressure</div>
+  <div class="qtitle" style="margin-bottom:6px;">Book your free 15-min chat.</div>
+  <div class="qsub">Not sure which option is right? That's completely fine. Chloe will walk you through your situation and help you figure out what makes sense — no obligation, no sales pitch.</div>
+  <div style="background:var(--white);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;">
+    <!-- REPLACE src with your Calendly free-chat link -->
+    <iframe src="https://calendly.com/pirk/free-chat" width="100%" height="540" frameborder="0" style="border:none;display:block;" title="Book a free chat with Pirk"></iframe>
+  </div>
+  <div class="nav" style="margin-top:14px;"><button class="btn-back" onclick="go(18)">← Back</button></div>
+</div>
+
+
+<!-- ════════════════════════════════
+     S2f — FACE PROCEDURES
+════════════════════════════════ -->
+<div class="screen" id="s2f">
+  <div class="eyebrow">Face procedures</div>
+  <div class="qtitle">Which procedure are you considering?</div>
+  <div class="qsub">Not sure of the exact name? The descriptions below will help. Many people come to us unsure — that's exactly what we're here for.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="setProc('rhino');goDir('3f-rhino')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M10 4 Q8 9 9 13 Q10 16 10 17" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 13 Q10 15 13 13" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Rhinoplasty</div>
+        <div class="opt-also">Also known as: nose job, nose reshaping</div>
+        <div class="opt-sub">Reshaping the nose for proportion, symmetry or to improve breathing. One of the most nuanced procedures — surgeon selection is critical.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('bleph');goDir('3f-bleph')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 10 Q10 4 17 10" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M3 10 Q10 14 17 10" stroke="#F2705C" stroke-width="1.2" fill="none"/><circle cx="10" cy="10" r="2" stroke="#F2705C" stroke-width="1.2"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Blepharoplasty</div>
+        <div class="opt-also">Also known as: eyelid surgery, eye lift, upper or lower lid surgery</div>
+        <div class="opt-sub">Removes excess skin or fat from the upper or lower eyelids to create a more rested, open appearance.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('brow');goDir('3f-brow')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 8 Q10 5 16 8" stroke="#F2705C" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M7 12 Q10 10 13 12" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Brow Lift / Forehead Lift</div>
+        <div class="opt-also">Also known as: browplasty, temporal lift</div>
+        <div class="opt-sub">Raises the brows and smooths forehead lines to reduce a tired or heavy appearance. Often combined with eyelid surgery.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('facelift');goDir('3f-facelift')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="5.5" ry="7" stroke="#F2705C" stroke-width="1.5"/><path d="M6 6 Q10 4 14 6" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Facelift / Neck Lift</div>
+        <div class="opt-also">Also known as: rhytidectomy, lower face rejuvenation</div>
+        <div class="opt-sub">Tightens and lifts sagging skin on the face, jowls and neck. Results can be dramatic or subtle depending on technique and goals.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('fat');goDir('3f-fat')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="5" stroke="#F2705C" stroke-width="1.5"/><path d="M10 7v6M7 10h6" stroke="#F2705C" stroke-width="1.2"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Fat Transfer to Face</div>
+        <div class="opt-also">Also known as: fat grafting, facial volumisation, surgical filler</div>
+        <div class="opt-sub">Uses your own fat to restore volume to hollowed cheeks, temples or under-eyes. Natural, long-lasting results.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('ear');goDir('3f-ear')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M13 5 Q16 8 15 12 Q14 16 10 16 Q8 16 8 14 Q10 14 10 12 Q10 9 8 8 Q7 5 10 4 Q12 3 13 5z" stroke="#F2705C" stroke-width="1.3" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Ear Reshaping</div>
+        <div class="opt-also">Also known as: otoplasty, ear pinning, ear correction</div>
+        <div class="opt-sub">Reshapes or repositions prominent or asymmetric ears. Common in both adults and children, with a high satisfaction rate.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('chin');goDir('3f-chin')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="5" ry="6.5" stroke="#F2705C" stroke-width="1.5"/><path d="M7 16 Q10 19 13 16" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Chin / Jaw Augmentation</div>
+        <div class="opt-also">Also known as: chin implant, genioplasty, jaw reshaping</div>
+        <div class="opt-sub">Enhances chin projection or jaw definition for improved facial balance and proportion.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(1)">← Back</button><div></div></div>
+</div>
+
+<!-- ════ FACE FOLLOW-UPS ════ -->
+
+<div class="screen" id="s3f-rhino">
+  <div class="eyebrow">Rhinoplasty</div>
+  <div class="qtitle">What's driving your decision?</div>
+  <div class="qsub">Rhinoplasty is one of the most technique-sensitive procedures. Your goals here help us identify surgeons who specialise in exactly the right approach.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4v12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Proportion & profile</div><div class="opt-sub">I'd like a smaller, straighter or more refined nose to balance my features</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M7 10 Q10 6 13 10 Q10 14 7 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Tip or bridge refinement</div><div class="opt-sub">A specific area I'd like addressed — tip shape, bump, width or nostrils</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M8 6 Q10 4 12 6 L13 14 Q10 16 7 14z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M8 11 Q10 12 12 11" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Breathing difficulties</div><div class="opt-sub">I have functional issues — a deviated septum or breathing restriction</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 a6 6 0 1 1 2 4.5" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M4 14.5l0-4 4 0" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Revision rhinoplasty</div><div class="opt-sub">I've had a previous nose job and I'm not happy with the result</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-bleph">
+  <div class="eyebrow">Blepharoplasty</div>
+  <div class="qtitle">Which area are you focused on?</div>
+  <div class="qsub">Upper and lower lid surgery are quite different procedures. This helps us match surgeons with the right specialisation.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 8 Q10 4 17 8" stroke="#F2705C" stroke-width="1.8" fill="none"/><path d="M3 8 Q10 11 17 8" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Upper eyelids</div><div class="opt-sub">Excess skin is causing a heavy or hooded appearance</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 12 Q10 9 17 12" stroke="#F2705C" stroke-width="1.2" fill="none"/><path d="M3 12 Q10 16 17 12" stroke="#F2705C" stroke-width="1.8" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Lower eyelids</div><div class="opt-sub">Bags, puffiness or hollowing under the eyes</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 9 Q10 5 17 9" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M3 12 Q10 16 17 12" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Both upper and lower</div><div class="opt-sub">I'd like to address the full eye area for a more rested look</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Not sure yet</div><div class="opt-sub">I'd like guidance on what's right for my specific concerns</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-brow">
+  <div class="eyebrow">Brow lift</div>
+  <div class="qtitle">What's your main concern?</div>
+  <div class="qsub">Brow position affects the entire upper face. Your answer helps us identify surgeons who take a considered, natural approach.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 11 Q10 7 16 11" stroke="#F2705C" stroke-width="1.8" fill="none"/><path d="M7 15 Q10 13 13 15" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Heavy or low brows</div><div class="opt-sub">My brows sit low and make me look tired, angry or serious</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 9 Q7 6 10 8 Q13 6 16 9" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Forehead lines & wrinkles</div><div class="opt-sub">Deep horizontal lines or frown lines between the brows</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 Q10 5 16 10" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M3 8 Q10 4 17 8" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Combining with eyelid surgery</div><div class="opt-sub">I've been told or I suspect I need both brow and lid work</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-facelift">
+  <div class="eyebrow">Facelift / Neck lift</div>
+  <div class="qtitle">What result matters most to you?</div>
+  <div class="qsub">Modern facelift techniques have evolved significantly. Being clear on your goals helps us find surgeons known for natural, undetectable results.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 14 Q8 8 10 7 Q12 8 15 14" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 11 Q10 9 13 11" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Jowls & lower face</div><div class="opt-sub">Sagging along the jawline and lower cheeks I'd like lifted</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M8 6 Q10 4 12 6 L14 14 Q10 17 6 14z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M8 14 Q10 16 12 14" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Neck & chin definition</div><div class="opt-sub">Loose skin or fullness under the chin and along the neck</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="5.5" ry="7" stroke="#F2705C" stroke-width="1.5"/><path d="M7 7 Q10 5 13 7" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Full face rejuvenation</div><div class="opt-sub">I'd like to address the entire face for an overall refreshed result</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 10 Q10 6 15 10 Q10 15 5 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Subtle & natural result</div><div class="opt-sub">I want to look like a refreshed version of myself — not operated on</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-fat">
+  <div class="eyebrow">Fat transfer to face</div>
+  <div class="qtitle">Where are you looking to restore volume?</div>
+  <div class="qsub">Fat transfer uses your own tissue for natural, lasting results. Different areas require different surgical approaches.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 10 Q7 7 10 7 Q13 7 15 10" stroke="#F2705C" stroke-width="1.5" fill="none"/><circle cx="10" cy="13" r="2" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Cheeks & midface</div><div class="opt-sub">Hollowed or flat cheeks I'd like to restore and lift</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M3 10 Q10 4 17 10" stroke="#F2705C" stroke-width="1.2" fill="none"/><path d="M6 12 Q10 10 14 12" stroke="#F2705C" stroke-width="1.8" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Under eyes / tear trough</div><div class="opt-sub">Hollowing or dark shadows under my eyes</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="10" rx="7" ry="7" stroke="#F2705C" stroke-width="1.5"/><path d="M7 10 Q10 8 13 10" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Overall facial volume</div><div class="opt-sub">My face has become more hollow with age and I'd like it restored overall</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-ear">
+  <div class="eyebrow">Ear reshaping</div>
+  <div class="qtitle">What's your main concern?</div>
+  <div class="qsub">Otoplasty has a very high satisfaction rate. Your answer helps us find surgeons with specific ear reshaping experience.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M13 5 Q16 8 15 12 Q14 16 10 16 Q8 16 8 14 Q10 14 10 12 Q10 9 8 8 Q7 5 10 4 Q12 3 13 5z" stroke="#F2705C" stroke-width="1.3" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Prominent / protruding ears</div><div class="opt-sub">My ears stick out and I'd like them set closer to my head</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h5M11 10h5M10 4v5M10 11v5" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Asymmetry</div><div class="opt-sub">One ear sits or looks noticeably different from the other</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><rect x="4" y="7" width="12" height="7" rx="2" stroke="#F2705C" stroke-width="1.5"/><path d="M8 7V5a2 2 0 0 1 4 0v2" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Shape or size</div><div class="opt-sub">I'd like to address the overall shape, size or proportion of my ears</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3f-chin">
+  <div class="eyebrow">Chin / Jaw augmentation</div>
+  <div class="qtitle">What are you hoping to achieve?</div>
+  <div class="qsub">Chin and jaw procedures can make a significant difference to overall facial balance and proportion.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M7 16 Q10 19 13 16 L14 10 Q10 8 6 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">More chin projection</div><div class="opt-sub">I have a weak or recessed chin I'd like to bring forward</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 5 15 8 L16 14 Q10 17 4 14z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Jaw definition</div><div class="opt-sub">I'd like a more defined, angular jawline</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4v12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Overall facial balance</div><div class="opt-sub">My chin and jaw don't feel proportionate to the rest of my face</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 a6 6 0 1 1 2 4.5" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M4 14.5l0-4 4 0" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Revision or refinement</div><div class="opt-sub">I've had a previous procedure and I'd like it adjusted</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2f')">← Back</button><div></div></div>
+</div>
+
+<!-- ════════════════════════════════
+     S2b — BODY PROCEDURES
+════════════════════════════════ -->
+<div class="screen" id="s2b">
+  <div class="eyebrow">Body procedures</div>
+  <div class="qtitle">Which procedure are you considering?</div>
+  <div class="qsub">Not sure of the exact name? Read the descriptions — many of these overlap and your surgeon will help confirm the right approach.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="setProc('tummy');goDir('3b-tummy')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="6" ry="5" stroke="#F2705C" stroke-width="1.5"/><path d="M7 8 Q10 6 13 8" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Tummy Tuck</div>
+        <div class="opt-also">Also known as: abdominoplasty, flat tummy surgery</div>
+        <div class="opt-sub">Removes excess skin and tightens abdominal muscles. Common after pregnancy, significant weight loss, or where diet and exercise haven't achieved the result.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('lipo');goDir('3b-lipo')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 6 Q10 4 14 6 L15 14 Q10 16 5 14z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M8 10 Q10 11 12 10" stroke="#F2705C" stroke-width="1.2"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Liposuction</div>
+        <div class="opt-also">Also known as: lipo, fat removal, body sculpting</div>
+        <div class="opt-sub">Removes stubborn fat deposits from targeted areas. Works best on localised fat rather than overall weight loss — skin elasticity is an important factor.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('contouring');goDir('3b-contouring')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 16 Q6 10 10 8 Q14 10 15 16" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 12 Q10 10 13 12" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Body Contouring / Sculpting</div>
+        <div class="opt-also">Also known as: body sculpting, hi-def lipo, 360 lipo</div>
+        <div class="opt-sub">A more comprehensive approach to reshaping the body — often combining lipo with skin tightening or muscle definition techniques.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('arm');goDir('3b-arm')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 4 Q5 10 7 16 L9 16 Q8 10 10 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Arm Lift</div>
+        <div class="opt-also">Also known as: brachioplasty, bat wing correction</div>
+        <div class="opt-sub">Removes excess skin and fat from the upper arms. Often sought after significant weight loss when skin has lost its elasticity.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('thigh');goDir('3b-thigh')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M8 4 Q7 10 9 17 L11 17 Q10 10 12 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Thigh Lift</div>
+        <div class="opt-also">Also known as: thighplasty, inner thigh lift</div>
+        <div class="opt-sub">Tightens and reshapes the inner or outer thighs by removing excess skin. Often combined with liposuction for best results.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('bbl');goDir('3b-bbl')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 4 15 8 Q16 14 10 17 Q4 14 5 8z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Brazilian Butt Lift (BBL)</div>
+        <div class="opt-also">Also known as: fat transfer to buttocks, bum augmentation</div>
+        <div class="opt-sub">Uses your own fat (harvested via liposuction) to enhance the shape and projection of the buttocks. Safety and surgeon experience are paramount here.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('weightloss');goDir('3b-weightloss')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 16 Q7 8 10 6 Q13 8 16 16" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 12 Q10 10 13 12" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-title">Post-Weight Loss / Skin Removal</div>
+        <div class="opt-also">Also known as: body lift, skin excision, post-bariatric surgery</div>
+        <div class="opt-sub">Removes excess skin following significant weight loss. Can involve multiple body areas — abdomen, thighs, arms, back. Often staged across procedures.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+    <div class="opt" onclick="setProc('mummybody');goDir('3b-mummybody')">
+      <div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="3.5" stroke="#F2705C" stroke-width="1.5"/><circle cx="13" cy="9" r="3.5" stroke="#F2705C" stroke-width="1.5"/><path d="M6 14 Q10 17 14 14" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="opt-body">
+        <div class="opt-badge coral">Popular combination</div>
+        <div class="opt-title">Mummy Makeover (Body)</div>
+        <div class="opt-also">Tummy tuck + liposuction, often combined with breast procedures</div>
+        <div class="opt-sub">A combination of procedures to restore the body after pregnancy. The body component typically includes a tummy tuck and liposuction — often done alongside breast work.</div>
+      </div>
+      <div class="opt-arrow">›</div>
+    </div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go(1)">← Back</button><div></div></div>
+</div>
+
+<!-- ════ BODY FOLLOW-UPS ════ -->
+
+<div class="screen" id="s3b-tummy">
+  <div class="eyebrow">Tummy tuck</div>
+  <div class="qtitle">What's driving your decision?</div>
+  <div class="qsub">Understanding your starting point helps us match surgeons who specialise in your specific situation — results vary significantly based on skin laxity and muscle separation.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="7" r="3" stroke="#F2705C" stroke-width="1.5"/><path d="M5 18 Q6 12 10 11 Q14 12 15 18" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Post-pregnancy changes</div><div class="opt-sub">Loose skin and separated muscles following pregnancy or multiple pregnancies</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 Q10 4 16 10 Q10 17 4 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">After significant weight loss</div><div class="opt-sub">Excess skin remaining after losing a substantial amount of weight</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 8 Q10 5 14 8 L15 14 Q10 16 5 14z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Stubborn lower tummy</div><div class="opt-sub">Diet and exercise haven't shifted the lower abdominal area</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4v12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Combining with other procedures</div><div class="opt-sub">I'd like a tummy tuck as part of a broader body transformation</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3b-lipo">
+  <div class="eyebrow">Liposuction</div>
+  <div class="qtitle">Where are you looking to target?</div>
+  <div class="qnote">Select all that apply</div>
+  <div class="chips" id="ch-lipo">
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Abdomen / stomach</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Flanks / love handles</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Inner thighs</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Outer thighs / hips</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Arms</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Back / bra line</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Chin / neck</div>
+    <div class="chip" onclick="tog(this,'ch-lipo','b-lipo')"><div class="chip-dot"></div>Multiple areas / not sure</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><button class="btn-go" id="b-lipo" onclick="go(4)">Continue →</button></div>
+</div>
+
+<div class="screen" id="s3b-contouring">
+  <div class="eyebrow">Body contouring</div>
+  <div class="qtitle">What result are you looking for?</div>
+  <div class="qsub">Body contouring covers a wide range of goals. Your answer helps us identify the right surgical approach and the right specialist.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 16 Q7 10 10 8 Q13 10 14 16" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Overall silhouette improvement</div><div class="opt-sub">I want a more defined, proportionate shape across multiple areas</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M7 5 L7 15 M13 5 L13 15 M7 10 Q10 8 13 10" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Muscle definition (hi-def)</div><div class="opt-sub">I'm already fit and I'd like more visible muscle definition</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 4 15 8 Q13 16 10 17 Q7 16 5 8z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Waist & hourglass shape</div><div class="opt-sub">I want to create or enhance my waist and curves</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#F2705C" stroke-width="1.5"/><text x="10" y="14" text-anchor="middle" font-size="9" fill="#F2705C">?</text></svg></div><div class="opt-body"><div class="opt-title">Not sure of the exact approach yet</div><div class="opt-sub">I have goals in mind but I need guidance on what procedure is right</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3b-arm">
+  <div class="eyebrow">Arm lift</div>
+  <div class="qtitle">What's your main concern with your arms?</div>
+  <div class="qsub">Arm lift results depend greatly on skin quality and how much laxity is present. Your answer helps us set realistic expectations and find the right specialist.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 4 Q5 10 7 16 L9 16 Q8 10 10 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Excess loose skin</div><div class="opt-sub">Skin that hangs from the upper arm, especially when raising my arms</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 5 Q5 10 8 15 L10 15 Q9 10 11 5z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M9 10 Q11 9 13 11" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Excess fat and loose skin</div><div class="opt-sub">A combination of fullness and laxity I'd like addressed together</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 Q10 4 16 10 Q10 17 4 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Post-weight loss arms</div><div class="opt-sub">Significant skin remaining after losing a substantial amount of weight</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3b-thigh">
+  <div class="eyebrow">Thigh lift</div>
+  <div class="qtitle">Which area are you looking to address?</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M9 4 Q8 10 10 17 L12 17 Q11 10 13 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Inner thighs</div><div class="opt-sub">Loose or excess skin on the inner thigh — rubbing or sagging</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M7 4 Q8 10 6 17 L8 17 Q9 10 8 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Outer thighs / hips</div><div class="opt-sub">Sagging skin or fullness on the outer thigh and hip area</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M8 4 Q7 10 9 17 L11 17 Q10 10 12 4z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M7 10 Q10 12 13 10" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Both — full thigh lift</div><div class="opt-sub">I'd like to address the entire thigh area for a more lifted result</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10 Q10 4 16 10 Q10 17 4 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Post-weight loss</div><div class="opt-sub">Significant skin remaining following substantial weight loss</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3b-bbl">
+  <div class="eyebrow">Brazilian butt lift</div>
+  <div class="qtitle">What result are you hoping for?</div>
+  <div class="qsub">BBL uses your own fat for natural enhancement. Surgeon selection and safety protocols are critical for this procedure — we only match surgeons with stringent safety records.</div>
+  <div class="info-block"><p><strong>Safety first.</strong> BBL has specific safety requirements. We only recommend surgeons who follow current best-practice guidelines. This is something we discuss in detail on your matching call.</p></div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 4 15 8 Q16 14 10 17 Q4 14 5 8z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">More volume & projection</div><div class="opt-sub">I'd like a fuller, rounder shape with more projection</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M6 10 Q10 5 14 10 Q10 17 6 10z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Shape & lift</div><div class="opt-sub">I want more of a lifted, perky shape rather than just added volume</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 5 15 8 Q13 16 10 17 Q7 16 5 8z" stroke="#F2705C" stroke-width="1.5" fill="none"/><path d="M8 13 Q10 15 12 13" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Overall body proportion</div><div class="opt-sub">I want a more balanced waist-to-hip ratio — the lipo reduction is as important as the transfer</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+<div class="screen" id="s3b-weightloss">
+  <div class="eyebrow">Post-weight loss surgery</div>
+  <div class="qtitle">Which areas are you looking to address?</div>
+  <div class="qsub">Post-weight loss surgery often involves multiple areas. Many procedures are staged — your surgeon will guide the right approach for your situation.</div>
+  <div class="qnote">Select all that apply</div>
+  <div class="chips" id="ch-wl">
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Abdomen / tummy</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Arms</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Thighs</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Back / flanks</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Breasts</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Full body lift</div>
+    <div class="chip" onclick="tog(this,'ch-wl','b-wl')"><div class="chip-dot"></div>Not sure yet — I need guidance</div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><button class="btn-go" id="b-wl" onclick="go(4)">Continue →</button></div>
+</div>
+
+<div class="screen" id="s3b-mummybody">
+  <div class="eyebrow">Mummy makeover — body</div>
+  <div class="qtitle">What body changes are you most focused on?</div>
+  <div class="qsub">The body component of a mummy makeover typically focuses on the abdomen and waist area. Your answer helps us find surgeons experienced in staging or combining these correctly.</div>
+  <div class="opt-list">
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="11" rx="6" ry="5" stroke="#F2705C" stroke-width="1.5"/><path d="M7 8 Q10 6 13 8" stroke="#F2705C" stroke-width="1.2"/></svg></div><div class="opt-body"><div class="opt-title">Tummy — loose skin & muscles</div><div class="opt-sub">Separated abdominal muscles and excess skin post-pregnancy</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M5 8 Q10 4 15 8 Q13 16 10 17 Q7 16 5 8z" stroke="#F2705C" stroke-width="1.5" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Waist & hip area</div><div class="opt-sub">Stubborn fat around the waist and hips that won't shift</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M10 4v12" stroke="#F2705C" stroke-width="1.5"/></svg></div><div class="opt-body"><div class="opt-title">Full body transformation</div><div class="opt-sub">Tummy, waist, hips — I'd like to address everything together</div></div><div class="opt-arrow">›</div></div>
+    <div class="opt" onclick="go(4)"><div class="opt-icon"><svg class="ic" viewBox="0 0 20 20" fill="none"><circle cx="7" cy="9" r="3.5" stroke="#F2705C" stroke-width="1.5"/><circle cx="13" cy="9" r="3.5" stroke="#F2705C" stroke-width="1.5"/><path d="M6 15 Q10 18 14 15" stroke="#F2705C" stroke-width="1.2" fill="none"/></svg></div><div class="opt-body"><div class="opt-title">Body + breast together</div><div class="opt-sub">I'd like to combine body work with breast procedures at the same time</div></div><div class="opt-arrow">›</div></div>
+  </div>
+  <div class="nav"><button class="btn-back" onclick="go('2b')">← Back</button><div></div></div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+
+// ── LEAD DATA CAPTURE ──────────────────────────────────────
+const leadData = {
+  area: null,
+  procedure: null,
+  sub_procedure: null,
+  age_bracket: null,
+  priorities: [],
+  surgeon_preferences: [],
+  consultation_status: null,
+  surgeon_in_mind: null,
+  blockers: [],
+  medicare_super: [],
+  support_interest: [],
+  payment_plan: null,
+  timeline: null,
+  budget: null,
+  location: null,
+  travel: null,
+  name: null,
+  email: null,
+  phone: null,
+  package_selected: null,
+  payment_type: null,
+  utm_source: new URLSearchParams(window.location.search).get('utm_source'),
+  utm_medium: new URLSearchParams(window.location.search).get('utm_medium'),
+  utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign'),
+  utm_content: new URLSearchParams(window.location.search).get('utm_content'),
+  utm_term: new URLSearchParams(window.location.search).get('utm_term'),
+  fbclid: new URLSearchParams(window.location.search).get('fbclid'),
+  ttclid: new URLSearchParams(window.location.search).get('ttclid'),
+  funnel_variant: document.title.includes('B') ? 'B' : 'A',
+  started_at: new Date().toISOString(),
+  completed_at: null,
+};
+
+function captureChips(groupId) {
+  return Array.from(document.querySelectorAll('#' + groupId + ' .chip.sel'))
+    .map(el => el.textContent.trim());
+}
+
+function captureSelected(listId) {
+  const sel = document.querySelector('#' + listId + ' .opt.sel');
+  if (!sel) return null;
+  const title = sel.querySelector('.opt-title');
+  return title ? title.textContent.trim() : null;
+}
+
+// ── GHL WEBHOOK (placeholder — replace with your real URL) ──
+const GHL_WEBHOOK_URL = 'https://YOUR_GHL_WEBHOOK_URL_HERE';
+
+function submitLead() {
+  leadData.completed_at = new Date().toISOString();
+  console.log('[Pirk] Lead data captured:', JSON.stringify(leadData, null, 2));
+
+  // Store locally as backup
+  try {
+    const leads = JSON.parse(localStorage.getItem('pirk_leads') || '[]');
+    leads.push({...leadData, submitted_at: new Date().toISOString()});
+    localStorage.setItem('pirk_leads', JSON.stringify(leads));
+  } catch(e) { console.warn('localStorage save failed', e); }
+
+  // Send to GHL webhook
+  if (GHL_WEBHOOK_URL !== 'https://YOUR_GHL_WEBHOOK_URL_HERE') {
+    fetch(GHL_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(leadData),
+    }).then(r => console.log('[Pirk] GHL webhook:', r.status))
+      .catch(e => console.warn('[Pirk] GHL webhook failed:', e));
+  }
+}
+
+let proc = null;
+let area = null;
+
+const labels = {
+  1:'Let\'s get started',
+  2:'Breast procedures','2f':'Face procedures','2b':'Body procedures',
+  '3a':'Your goals','3b':'Your goals','3c':'Your goals','3d':'Your goals','3e':'Your goals',
+  '3f-rhino':'Rhinoplasty','3f-bleph':'Blepharoplasty','3f-brow':'Brow lift',
+  '3f-facelift':'Facelift','3f-fat':'Fat transfer','3f-ear':'Ear reshaping','3f-chin':'Chin & jaw',
+  '3b-tummy':'Tummy tuck','3b-lipo':'Liposuction','3b-contouring':'Body contouring',
+  '3b-arm':'Arm lift','3b-thigh':'Thigh lift','3b-bbl':'Brazilian butt lift',
+  '3b-weightloss':'Post-weight loss','3b-mummybody':'Mummy makeover',
+  4:'Your priorities',5:'Surgeon preferences',6:'Where are you at?',
+  7:'What\'s stopped you',8:'Funding & costs',9:'How we can help',
+  10:'Payment plan',11:'Your timeline',12:'Your budget',
+  13:'Your location',14:'Travel preferences',15:'Narrowing your match',
+  16:'Your matches',17:'Almost there',18:'Your results',age:'About you',
+  19:'Payment — The Matching',20:'Payment — Full Support',21:'Payment — Custom',
+  22:'Secure checkout',23:'Book your call',chat:'Free 15-min chat'
+};
+
+const TOTAL = 16;
+
+let currentPackage = 'matching';
+let prevPayScreen = 19;
+
+function goPayment(pkg){leadData.package_selected=pkg;
+  currentPackage = pkg;
+  const pkgMap = {matching:19, support:20, custom:21};
+  const labelMap = {matching:'The Matching — $149', support:'Full Support — $599', custom:'Custom Deposit — $99'};
+  prevPayScreen = pkgMap[pkg];
+  // Update checkout summary
+  const lbl = document.getElementById('pay-pkg-label');
+  const amt = document.getElementById('pay-pkg-amount');
+  if(lbl) lbl.textContent = pkg==='matching'?'The Matching':pkg==='support'?'Full Support':'Custom Deposit';
+  if(amt) amt.textContent = pkg==='matching'?'$149':pkg==='support'?'$599':'$99';
+  // Calendly label
+  const calSub = document.getElementById('cal-sub');
+  const calEye = document.getElementById('cal-eyebrow');
+  if(calEye) calEye.textContent = 'Payment confirmed';
+  if(calSub) calSub.textContent = pkg==='custom'?'Book your custom planning call with Chloe. She\'ll use this time to understand your full situation and build your plan.':'Choose a time that works for you. Chloe will come prepared with everything you\'ve shared — ready to walk you through your matches.';
+  go(pkgMap[pkg]);
+}
+
+function goPayBack(){
+  go(prevPayScreen);
+}
+
+function selPay(pkg, type){leadData.payment_type=type;
+  const pifEl = document.getElementById('pay-pif-'+pkg);
+  const instEl = document.getElementById('pay-inst-'+pkg);
+  const dotEl = document.getElementById('dot-inst-'+pkg);
+  if(!pifEl || !instEl) return;
+  if(type==='pif'){
+    pifEl.style.borderColor='var(--coral)';
+    instEl.style.borderColor='var(--border)';
+    pifEl.querySelector('div div:last-child') && null;
+    if(dotEl){dotEl.style.background='transparent';dotEl.style.borderColor='var(--border)';}
+    // restore pif dot
+    const pifDot = pifEl.querySelector('[style*="border-radius:50%"]');
+  } else {
+    instEl.style.borderColor='var(--coral)';
+    pifEl.style.borderColor='var(--border)';
+    if(dotEl){dotEl.style.background='var(--coral)';dotEl.style.borderColor='var(--coral)';dotEl.innerHTML='<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5 3.5-4" stroke="#fff" stroke-width="1.5"/></svg>';}
+  }
+}
+
+function chk16(){
+  const name = document.getElementById('inp-name').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const btn = document.getElementById('b16');
+  if(name.length>0 && email.includes('@')){
+    btn.classList.add('on');
+  } else {
+    btn.classList.remove('on');
+  }
+}
+
+
+function goCapture(field, n, el) {
+  const title = el.querySelector('.opt-title');
+  if (title) leadData[field] = title.textContent.trim();
+  go(n);
+}
+function go(n) {
+  // Auto-capture selected option from current screen before navigating
+  const currentScreen = document.querySelector('.screen.on');
+  if (currentScreen) {
+    const sid = currentScreen.id;
+    const clickedOpt = currentScreen.querySelector('.opt.sel') || null;
+
+    // Capture sub-procedure from s3x screens
+    if (sid.startsWith('s3')) {
+      const selTitle = event && event.currentTarget ? event.currentTarget.querySelector('.opt-title') : null;
+      if (selTitle) leadData.sub_procedure = selTitle.textContent.trim();
+    }
+  }
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  const el = document.getElementById('s'+n);
+  if(el){el.classList.add('on');progUpdate(n);}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goDir(n){go(n);}
+
+function setArea(a){area=a;leadData.area=a;}
+function setProc(p){proc=p;leadData.procedure=p;}
+
+function progUpdate(n){
+  const numN = parseInt(n)||0;
+  const pct = numN>=17?100:Math.round(((numN-1)/TOTAL)*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-ct').textContent=numN>=17?'Complete':numN+' of '+TOTAL;
+  document.getElementById('prog-label').textContent=labels[n]||'';
+}
+
+function goBackProc(){
+  if(area==='face'){
+    const fmap={rhino:'3f-rhino',bleph:'3f-bleph',brow:'3f-brow',facelift:'3f-facelift',fat:'3f-fat',ear:'3f-ear',chin:'3f-chin'};
+    go(proc&&fmap[proc]?fmap[proc]:'2f');
+  } else if(area==='body'){
+    const bmap={tummy:'3b-tummy',lipo:'3b-lipo',contouring:'3b-contouring',arm:'3b-arm',thigh:'3b-thigh',bbl:'3b-bbl',weightloss:'3b-weightloss',mummybody:'3b-mummybody'};
+    go(proc&&bmap[proc]?bmap[proc]:'2b');
+  } else {
+    const brmap={aug:'3a',lift:'3b',reduction:'3c',combo:'3d',revision:'3e'};
+    go(proc&&brmap[proc]?brmap[proc]:'3a');
+  }
+}
+
+// Chips toggle
+function tog(el,gid,bid){
+  el.classList.toggle('sel');
+  const any=document.querySelectorAll('#'+gid+' .chip.sel').length>0;
+  const b=document.getElementById(bid);
+  if(b){any?b.classList.add('on'):b.classList.remove('on');}
+}
+
+// Consult picker
+function pickConsult(type,el){leadData.consultation_status=type;
+  document.querySelectorAll('#s6opts .opt').forEach(o=>{o.classList.remove('sel');});
+  el.classList.add('sel');
+  document.getElementById('surgeon-detail').style.display = type==='mind' ? 'block' : 'none';
+  document.getElementById('b6').classList.add('on');
+}
+
+// All of the above on support — pre-selected
+document.getElementById('b9').classList.add('on');
+</script>
+</body>
+</html>
